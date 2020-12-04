@@ -1,0 +1,15 @@
+{
+    "name": "com.unity.multiplayer.mlapi.examples",
+    "references": [
+        "GUID:cf47cc1e41b6143458fdae62b8ecc06a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

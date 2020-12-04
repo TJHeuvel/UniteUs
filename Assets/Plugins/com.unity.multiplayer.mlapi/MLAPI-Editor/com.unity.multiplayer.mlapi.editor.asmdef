@@ -1,0 +1,17 @@
+{
+    "name": "com.unity.multiplayer.mlapi.editor",
+    "references": [
+        "GUID:cf47cc1e41b6143458fdae62b8ecc06a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
