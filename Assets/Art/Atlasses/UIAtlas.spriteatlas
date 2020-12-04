@@ -1,0 +1,200 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UIAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 660f0b8517f76df4ba9b5807be9ee005, type: 3}
+    totalSpriteSurfaceArea: 204976
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: be8c8420077a64043858f6085b51b80d, type: 3}
+  - {fileID: 21300000, guid: 61f3c0c0cef143540a6cba4fc6670f31, type: 3}
+  - {fileID: 21300000, guid: 6920f1d00b6090445b1cad0fc740a453, type: 3}
+  - {fileID: 21300000, guid: 0f18adf08b100b74d825018f0b1fe69b, type: 3}
+  - {fileID: 21300000, guid: f3f43d91ac3a4234d999e857c818d3c0, type: 3}
+  - {fileID: 21300000, guid: b136ef1247b465347b60e2827930c6b9, type: 3}
+  - {fileID: 21300000, guid: 0822f2320bcde1f4fb7a5df9b3baa4f5, type: 3}
+  - {fileID: 21300000, guid: 5ecc4672206222d4a928908a2563f1e9, type: 3}
+  - {fileID: 21300000, guid: 3da2da824d738c54581dd308685c9d10, type: 3}
+  - {fileID: 21300000, guid: a532ae92a45fd784a8ae4e3fbb3df62b, type: 3}
+  - {fileID: 21300000, guid: 69412d032a61f914688af5f042ff371f, type: 3}
+  - {fileID: 21300000, guid: 3c48aa139fd09424182c37828d5c87eb, type: 3}
+  - {fileID: 21300000, guid: b644bf43310c5504fb7f07b5359b78aa, type: 3}
+  - {fileID: 21300000, guid: 3c08cf43ea4e3cf4382336f1819c6307, type: 3}
+  - {fileID: 21300000, guid: 3657f9530cf10444495d76cfd50dc73a, type: 3}
+  - {fileID: 21300000, guid: 4b689d531dca79d4896e88a1ad82b073, type: 3}
+  - {fileID: 21300000, guid: 421d3a83579a3d0449a1a4a20ab0ac3d, type: 3}
+  - {fileID: 21300000, guid: e1fb3c145ae730c40873708948ece17f, type: 3}
+  - {fileID: 21300000, guid: ed44a154ad30d8543adaf30ab0768eb4, type: 3}
+  - {fileID: 21300000, guid: 0030d2640c27fb64597024c56ce5dc21, type: 3}
+  - {fileID: 21300000, guid: 5f8108840267d9a44b04f2d10315b62b, type: 3}
+  - {fileID: 21300000, guid: c57b28c4068726a43a4a8dcfd11a0ba5, type: 3}
+  - {fileID: 21300000, guid: cf1019c419054fc4b80114539d8cc2b6, type: 3}
+  - {fileID: 21300000, guid: 8500c4e47751a3e4581b3935a31da8c6, type: 3}
+  - {fileID: 21300000, guid: 33126ce4b6bf47f41be901c11bba9552, type: 3}
+  - {fileID: 21300000, guid: 202b89f42a2f21d4889ee5e86426a441, type: 3}
+  - {fileID: 21300000, guid: e4941a05bb1609b4e9c2594e8febc90c, type: 3}
+  - {fileID: 21300000, guid: 658a8c25d298c4647b9898b6d1b07275, type: 3}
+  - {fileID: 21300000, guid: e4bf47b5b752ac144a014df6291f803c, type: 3}
+  - {fileID: 21300000, guid: 2e9003c59af6c324d9a0c4dda5dce638, type: 3}
+  - {fileID: 21300000, guid: a75e4fe5bc173064d90763610747885a, type: 3}
+  - {fileID: 21300000, guid: f4b17c169e870564e8d35938eb8506bf, type: 3}
+  - {fileID: 21300000, guid: d052e82650103e44388ffd22319a0b67, type: 3}
+  - {fileID: 21300000, guid: e9aefc26dd5283e4b8c9ae96e625c98c, type: 3}
+  - {fileID: 21300000, guid: d5f0f1d65963cc0479dfb92ded140c98, type: 3}
+  - {fileID: 21300000, guid: 498a66d6a0b2cd749831b5fba0c29169, type: 3}
+  - {fileID: 21300000, guid: d33c8ce6ef6354544ac3517ef358f3b6, type: 3}
+  - {fileID: 21300000, guid: 28703a2730bf28249bb260fe8926bb6f, type: 3}
+  - {fileID: 21300000, guid: bd7cbd27d728fbb4a9dbac0b4fd4bfcf, type: 3}
+  - {fileID: 21300000, guid: 422fe647caf62d948862f103874fc5a3, type: 3}
+  - {fileID: 21300000, guid: 4fc5d757b18ddc84db3c92424c0bf4e6, type: 3}
+  - {fileID: 21300000, guid: 646bae6765b8e4b4fbf4f1cedf387e9f, type: 3}
+  - {fileID: 21300000, guid: d379068733a76df47b7179c71c1e0256, type: 3}
+  - {fileID: 21300000, guid: 7ab804f78cdc4ed42aef0a549849bfaa, type: 3}
+  - {fileID: 21300000, guid: 23c7dbf7f8e696946ad330de7d42c84a, type: 3}
+  - {fileID: 21300000, guid: 4d726928079a6e1468353db52fe19354, type: 3}
+  - {fileID: 21300000, guid: c566a848035839a418673b7f86abd83f, type: 3}
+  - {fileID: 21300000, guid: bb4c8d787d0c04b40a9773caa78cbdc4, type: 3}
+  - {fileID: 21300000, guid: f89ac8d84dca4c04f9fd3ff33d18a653, type: 3}
+  - {fileID: 21300000, guid: e0923ad8f65d3e0448e674fdc73cda84, type: 3}
+  - {fileID: 21300000, guid: 0f44e419e466b8946a907f90ae40225a, type: 3}
+  - {fileID: 21300000, guid: ed470daa3742908408ff7d608942fd88, type: 3}
+  - {fileID: 21300000, guid: 24fc1cea0f4535b4f89bd2725e5d9b65, type: 3}
+  - {fileID: 21300000, guid: 4923ef4b9e4882d42ab8461616fe15fb, type: 3}
+  - {fileID: 21300000, guid: b467d97bcc8d2f346aac3a55a8760d9f, type: 3}
+  - {fileID: 21300000, guid: 502ca78bae7871a41a41833f22d1038b, type: 3}
+  - {fileID: 21300000, guid: d93b369ba82434d4b8ba0ea657ea1ca7, type: 3}
+  - {fileID: 21300000, guid: d773c89b743a5f8498608cd915a567a7, type: 3}
+  - {fileID: 21300000, guid: 3e59c1bbca3986b4dab2b561075675b8, type: 3}
+  - {fileID: 21300000, guid: 47a00ebb7a499da45a228349ea342725, type: 3}
+  - {fileID: 21300000, guid: 9765ebfbe3c58644e8d4081e95f526f3, type: 3}
+  - {fileID: 21300000, guid: 12a0000c3e5903548be7e4107244158b, type: 3}
+  - {fileID: 21300000, guid: 7806838cf6fd56d4689557e57cc420d7, type: 3}
+  - {fileID: 21300000, guid: 213a991d28c654f4e8bc93be1cce954f, type: 3}
+  - {fileID: 21300000, guid: a939952dcc643624da20b7b905457cec, type: 3}
+  - {fileID: 21300000, guid: 6b3cd82d3efaa7d47a408e39172d5d90, type: 3}
+  - {fileID: 21300000, guid: 1d62ab9de7c9ecc408378b06c7e29dc5, type: 3}
+  - {fileID: 21300000, guid: b30243bdfeffe764e95b9b60a8eb892b, type: 3}
+  - {fileID: 21300000, guid: c1ac64cd4a1e2864e85630d6a08575e2, type: 3}
+  - {fileID: 21300000, guid: 5c45f52e4d53f4047ae883ff34e4fbd0, type: 3}
+  - {fileID: 21300000, guid: dc434e2e29e0b2b4e90e104fcfb5473d, type: 3}
+  - {fileID: 21300000, guid: 80bcc25ecfbcd094bbeed4f1fea28ec5, type: 3}
+  - {fileID: 21300000, guid: 84fb935e50def604f83b0b14c3539b0d, type: 3}
+  - {fileID: 21300000, guid: 364f70cef7152a645b1e1807c7ec6db7, type: 3}
+  - {fileID: 21300000, guid: eec0bdce0aeb46940a54a4d8ba8ee385, type: 3}
+  - {fileID: 21300000, guid: 77bdf9decbf58de4390e52860fe835bf, type: 3}
+  - {fileID: 21300000, guid: 77a58d6f58404bb4cb58ab2bbec38143, type: 3}
+  - {fileID: 21300000, guid: 608cd18f45ef96148a22ff5804d9313c, type: 3}
+  - {fileID: 21300000, guid: 952519df87d14764790a9085fe04f208, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - crossair_red
+  - dotRed
+  - barVertical_red_bottom
+  - barHorizontal_yellow_right
+  - barHorizontal_shadow_right
+  - barVertical_shadow_top
+  - barVertical_red_top
+  - dot_shadow
+  - barHorizontal_yellow_left
+  - crossair_white
+  - barHorizontal_green_right
+  - squareYellow
+  - barVertical_green_mid
+  - glassPanel
+  - metalPanel_red
+  - dotGreen
+  - cursor_pointer3D
+  - glassPanel_cornerTL
+  - barHorizontal_yellow_mid
+  - crossair_redOutline
+  - barVertical_shadow_mid
+  - crossair_blueOutline
+  - squareBlue
+  - metalPanel
+  - crossair_black
+  - barHorizontal_green_mid
+  - glassPanel_cornerBL
+  - barVertical_white_top
+  - square_shadow
+  - barVertical_blue_mid
+  - cursor_hand
+  - squareRed
+  - glassPanel_corners
+  - barVertical_yellow_mid
+  - barVertical_white_bottom
+  - barVertical_blue_bottom
+  - glassPanel_cornerTR
+  - barVertical_red_mid
+  - metalPanel_redCorner
+  - glassPanel_projection
+  - barHorizontal_blue_left
+  - metalPanel_greenCorner
+  - dotBlue
+  - metalPanel_yellowCorner
+  - dotWhite
+  - barHorizontal_white_left
+  - barVertical_green_bottom
+  - barHorizontal_shadow_mid
+  - glassPanel_cornerBR
+  - barHorizontal_blue_mid
+  - barHorizontal_red_mid
+  - barHorizontal_blue_right
+  - metalPanel_plate
+  - barVertical_yellow_bottom
+  - metalPanel_blueCorner
+  - metalPanel_blue
+  - barVertical_yellow_top
+  - dotYellow
+  - barHorizontal_white_mid
+  - crossair_blue
+  - crossair_blackOutline
+  - barHorizontal_green_left
+  - barHorizontal_red_left
+  - barVertical_white_mid
+  - barVertical_blue_top
+  - metalPanel_green
+  - squareGreen
+  - barVertical_green_top
+  - barHorizontal_red_right
+  - cursor_pointerFlat_shadow
+  - cursor_pointerFlat
+  - metalPanel_yellow
+  - barVertical_shadow_bottom
+  - crossair_whiteOutline
+  - cursor_pointer3D_shadow
+  - barHorizontal_shadow_left
+  - squareWhite
+  - barHorizontal_white_right
+  - glassPanel_tab
+  m_Tag: UIAtlas
+  m_IsVariant: 0
