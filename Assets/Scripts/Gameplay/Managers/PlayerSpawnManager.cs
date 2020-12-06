@@ -2,9 +2,9 @@
 using UnityEngine;
 using System.Linq;
 
-//TODO: Someone, maybe me, should start a lobby when its a scene-start
 class PlayerSpawnManager : NetworkedBehaviour
 {
+    const float TAU = Mathf.PI * 2;
     public static PlayerSpawnManager Instance { get; private set; }
     [SerializeField]
     private PlayerController localPlayerPrefab,
@@ -12,11 +12,34 @@ class PlayerSpawnManager : NetworkedBehaviour
     [SerializeField] private Cinemachine.CinemachineVirtualCamera virtualCam;
     [SerializeField] private float spawnRadius = 10f;
 
-    const float TAU = Mathf.PI * 2;
+#if UNITY_EDITOR
+    [SerializeField] private bool dbgIsImposter;
+#endif
 
     void OnEnable()
     {
         Instance = this;
+
+#if UNITY_EDITOR
+
+        //No lobby, must be a direct scene start. Attempt to make some sort of environment
+        if (LobbyManager.Instance == null)
+        {
+            //i should probably just start a host
+            gameObject.AddComponent<NetworkingManager>();
+            gameObject.AddComponent<LobbyManager>();
+
+            LocalPlayer = Instantiate(localPlayerPrefab);
+            LocalPlayer.SetPlayer(new NetworkPlayer()
+            {
+                ID = 0,
+                Name = "EditorPlayer",
+                Role = dbgIsImposter ? PlayerRole.Imposter : PlayerRole.Civilian
+            }, 0);
+            virtualCam.Follow = LocalPlayer.transform;
+
+        }
+#endif
     }
     void OnDisable()
     {
@@ -31,6 +54,7 @@ class PlayerSpawnManager : NetworkedBehaviour
             if (Players[i].NetworkPlayer.ID == playerId) return Players[i];
         return null;
     }
+    public PlayerController LocalPlayer { get; private set; }
 
     public override void NetworkStart()
     {
@@ -53,7 +77,10 @@ class PlayerSpawnManager : NetworkedBehaviour
             Players[i].SetPlayer(networkPlayer, i);
 
             if (networkPlayer.IsLocal)
+            {
                 virtualCam.Follow = Players[i].transform;
+                LocalPlayer = Players[i];
+            }
         }
     }
 

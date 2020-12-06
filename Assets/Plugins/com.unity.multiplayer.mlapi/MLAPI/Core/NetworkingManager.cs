@@ -72,7 +72,7 @@ namespace MLAPI
             get
             {
                 if (IsServer) return NetworkConfig.NetworkTransport.ServerClientId;
-				else return localClientId;
+                else return localClientId;
             }
             internal set
             {
@@ -479,7 +479,7 @@ namespace MLAPI
                 {
                     disconnectedIds.Add(pair.Key);
 
-					if (pair.Key == NetworkConfig.NetworkTransport.ServerClientId)
+                    if (pair.Key == NetworkConfig.NetworkTransport.ServerClientId)
                         continue;
 
                     NetworkConfig.NetworkTransport.DisconnectRemoteClient(pair.Key);
@@ -488,7 +488,7 @@ namespace MLAPI
 
             foreach (KeyValuePair<ulong, PendingClient> pair in PendingClients)
             {
-                if(!disconnectedIds.Contains(pair.Key))
+                if (!disconnectedIds.Contains(pair.Key))
                 {
                     disconnectedIds.Add(pair.Key);
                     if (pair.Key == NetworkConfig.NetworkTransport.ServerClientId)
@@ -617,7 +617,8 @@ namespace MLAPI
             IsListening = false;
             IsServer = false;
             IsClient = false;
-            NetworkConfig.NetworkTransport.OnTransportEvent -= HandleRawTransportPoll;
+            if (NetworkConfig != null)
+                NetworkConfig.NetworkTransport.OnTransportEvent -= HandleRawTransportPoll;
             SpawnManager.DestroyNonSceneObjects();
             SpawnManager.ServerResetShudownStateForSceneObjects();
 
@@ -702,7 +703,8 @@ namespace MLAPI
                     NetworkProfiler.EndTick();
                 }
 
-                if (!Mathf.Approximately(networkTimeOffset, currentNetworkTimeOffset)) {
+                if (!Mathf.Approximately(networkTimeOffset, currentNetworkTimeOffset))
+                {
                     // Smear network time adjustments by no more than 200ms per second.  This should help code deal with
                     // changes more gracefully, since the network time will always flow forward at a reasonable pace.
                     float maxDelta = Mathf.Max(0.001f, 0.2f * Time.unscaledDeltaTime);
@@ -715,7 +717,8 @@ namespace MLAPI
         {
             float rtt = NetworkConfig.NetworkTransport.GetCurrentRtt(clientId) / 1000f;
             networkTimeOffset = netTime - receiveTime + rtt / 2f;
-            if (warp) {
+            if (warp)
+            {
                 currentNetworkTimeOffset = networkTimeOffset;
             }
             if (NetworkLog.CurrentLogLevel <= LogLevel.Developer) NetworkLog.LogInfo($"Received network time {netTime}, RTT to server is {rtt}, {(warp ? "setting" : "smearing")} offset to {networkTimeOffset} (delta {networkTimeOffset - currentNetworkTimeOffset})");

@@ -115,6 +115,9 @@ GameObject:
   - component: {fileID: 1656895768895317381}
   - component: {fileID: 6570112219457370908}
   - component: {fileID: 5736207842649203745}
+  - component: {fileID: 6202676588925405389}
+  - component: {fileID: 34932812919207649}
+  - component: {fileID: 3311623416599249376}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -151,6 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f7cb1e4441222439eb4c6584d36b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NetworkController: {fileID: 1656895768895317381}
   playerTextures:
   - {fileID: 21300000, guid: c5108036f0e5e5b48b7c038de66632d5, type: 3}
   - {fileID: 21300000, guid: fcb13b7fa031ddd40bf6f7a7143a3709, type: 3}
@@ -166,7 +170,7 @@ MonoBehaviour:
   playerRenderer: {fileID: 1143828364380426897}
   lblPlayerName: {fileID: 6957350942080678507}
   animator: {fileID: 6896322991066574727}
-  NetworkController: {fileID: 1656895768895317381}
+  interactTrigger: {fileID: 3311623416599249376}
 --- !u!114 &1656895768895317381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +249,56 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!58 &6202676588925405389
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403774532834422929}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3
+--- !u!50 &34932812919207649
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403774532834422929}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!114 &3311623416599249376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403774532834422929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 394282deaa260d3428880690df600a76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Interaction: 1
 --- !u!1 &7799169768030049361
 GameObject:
   m_ObjectHideFlags: 0

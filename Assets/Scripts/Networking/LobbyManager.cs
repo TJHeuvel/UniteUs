@@ -35,10 +35,11 @@ class LobbyManager : NetworkedBehaviour
     public NetworkPlayer GetLocalPlayer() => GetPlayerById(NetworkingManager.Singleton.LocalClientId);
 
     [System.Serializable]
-    public class GameSettingsData : IBitWritable
+    public struct GameSettingsData : IBitWritable
     {
-        public int ImposterCount = 1;
-        public float MovementSpeed = 5f;
+        public static GameSettingsData Default => new GameSettingsData() { ImposterCount = 1, MovementSpeed = 6 };
+        public int ImposterCount;
+        public float MovementSpeed;
 
         public void Read(Stream stream)
         {
@@ -58,11 +59,14 @@ class LobbyManager : NetworkedBehaviour
 
         }
     }
+
     public NetworkedVar<GameSettingsData> GameSettings = new NetworkedVar<GameSettingsData>(new NetworkedVarSettings()
     {
+
         ReadPermission = NetworkedVarPermission.Everyone,
         WritePermission = NetworkedVarPermission.Everyone //todo: figure out if we can get the host only?
-    });
+
+    }, GameSettingsData.Default);
 
 
     public static LobbyManager Instance { get; private set; }
@@ -99,6 +103,7 @@ class LobbyManager : NetworkedBehaviour
     {
         if (NetworkingManager.Singleton.TryGetComponent<UnetTransport>(out var transport))
             transport.ConnectAddress = address;
+        
         NetworkingManager.Singleton.OnClientConnectedCallback += onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback += onDisconnected;
         var tasks = NetworkingManager.Singleton.StartClient();
@@ -114,14 +119,16 @@ class LobbyManager : NetworkedBehaviour
 
         Players.Clear();
 
-        if (NetworkingManager.Singleton.IsClient)
-            NetworkingManager.Singleton.StopClient();
-        else if (NetworkingManager.Singleton.IsHost)
+        if (NetworkingManager.Singleton.IsHost)
         {
             NetworkingManager.Singleton.OnServerStarted -= onServerStarted;
-
             NetworkingManager.Singleton.StopHost();
         }
+        else if (NetworkingManager.Singleton.IsClient)
+        {
+            NetworkingManager.Singleton.StopClient();
+        }
+                
         NetworkingManager.Singleton.OnClientConnectedCallback -= onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback -= onDisconnected;
 

@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a300b2098610d448e98114089535aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
   collisionRadius: 0.6
   skinWidth: 0.01
 --- !u!1001 &3876686586645841991
@@ -22,6 +21,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6202676588925405389, guid: 3715a392f0dcf4d48a9655710bcf9f1e, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6403774532834422927, guid: 3715a392f0dcf4d48a9655710bcf9f1e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

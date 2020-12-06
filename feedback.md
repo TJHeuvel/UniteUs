@@ -10,7 +10,7 @@ I'm a Unity developer with about 10 years of experience, and a lot of experience
 NetworkManager manages way too much. 
 - It would be really sweet if an RPC could be both Server and Client. I want to avoid differences there as much as possible, i think thats a good pattern. 
 I’m very used to Relay, and i think there should be built in functionality for that. Clients sending message to client, via code. In practice that would loop through the server, which would immediately relay it to the players. In my ideal case there is only one InvokeRPC method, with an RPCTarget parameter of Server, Players, or player IDs. Or maybe because there is no ServerRPC method it is relayed, otherwise intercepted. With an option to send it to players specifically. At the moment this is a difficult concept to grasp.
-- Why is there no connected callback? I have to wait for those tasks. 
+- Why is there no connected callback? I have to wait for those tasks. Is there also no connected field? Is that isListening?
 - An async ext methods for those tasks would be very nice
 - Ive so far spend about one day getting a simple lobby to work. In Photon this is built in.
 - My NetworkedList just doesnt work out of the box. I dont see a lot of documentation. It doesnt work because its not a spawnedobject, i dont see why i need that. I hacked the framework to expose VarUpdate…

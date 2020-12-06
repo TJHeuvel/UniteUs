@@ -8,7 +8,7 @@ class SceneNetworkedObject : MonoBehaviour
 
     void OnEnable()
     {
-        if (networkedObject == null) return;
+        if (networkedObject == null || NetworkingManager.Singleton == null || NetworkingManager.Singleton.NetworkConfig == null) return;
         MLAPI.Spawning.SpawnManager.SpawnNetworkedObjectLocally(networkedObject, networkId, true, false, NetworkingManager.Singleton.ServerClientId, null, false, 0, true, true);
     }
 }

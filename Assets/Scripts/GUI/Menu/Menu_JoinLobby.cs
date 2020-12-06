@@ -5,30 +5,39 @@ using UnityEngine;
 class Menu_JoinLobby : MonoBehaviour
 {
     [SerializeField] private HashProvider hashProvider;
-    [SerializeField] private RectTransform parentJoin;
+    [SerializeField] private RectTransform parentJoin, parentLobby;
     [SerializeField] private TMPro.TMP_InputField inptJoinHash;
+    [SerializeField] private TMPro.TextMeshProUGUI lblGameSettings;
 
-    [SerializeField] private RectTransform parentLobby;
     void OnEnable()
     {
         parentJoin.gameObject.SetActive(true);
         parentLobby.gameObject.SetActive(false);
 
+        LobbyManager.Instance.GameSettings.OnValueChanged += onGameSettingsChanged;
         LobbyManager.Instance.OnLobbyJoined += onLobbyJoined;
     }
+
+
+
     void OnDisable()
     {
         LobbyManager.Instance.OnLobbyJoined -= onLobbyJoined;
+        LobbyManager.Instance.GameSettings.OnValueChanged -= onGameSettingsChanged;
 
         if (!LobbyManager.Instance.IsGameStarted)
             LobbyManager.Instance.LeaveLobby();
     }
 
-
+    private void onGameSettingsChanged(LobbyManager.GameSettingsData previousValue, LobbyManager.GameSettingsData newValue)
+    {
+        lblGameSettings.SetText($"Imposter count: {newValue.ImposterCount}\nMovement Speed: {newValue.MovementSpeed}");
+    }
     private void onLobbyJoined()
     {
         parentJoin.gameObject.SetActive(false);
         parentLobby.gameObject.SetActive(true);
+
     }
 
     public void OnJoinClicked()
