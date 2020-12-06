@@ -9,30 +9,32 @@ class Menu_PlayerList : MonoBehaviour
 
     void OnEnable()
     {
-        LobbyManager.Instance.OnPlayerAdded += onPlayerChanged;
-        LobbyManager.Instance.OnPlayerRemoved += onPlayerChanged;
+        LobbyManager.Instance.Players.OnListChanged += onPlayersChanged;
+
         refreshPlayerList();
     }
+
 
     void OnDisable()
     {
-        LobbyManager.Instance.OnPlayerAdded -= onPlayerChanged;
-        LobbyManager.Instance.OnPlayerRemoved -= onPlayerChanged;
+        LobbyManager.Instance.Players.OnListChanged -= onPlayersChanged;
     }
 
-    private void onPlayerChanged(IPlayer obj)
+
+    private void onPlayersChanged(MLAPI.NetworkedVar.Collections.NetworkedListEvent<NetworkPlayer> changeEvent)
     {
         refreshPlayerList();
     }
+
     private void refreshPlayerList()
     {
         for (int i = 0; i < lblPlayerNames.Length; i++)
         {
             string name = "Empty";
-            if(i < LobbyManager.Instance.Players.Count)
-                name = LobbyManager.Instance.Players.ElementAt(i).Value.Name;
+            if (i < LobbyManager.Instance.Players.Count)
+                name = LobbyManager.Instance.Players[i].Name;
 
-            lblPlayerNames[i].SetText(name);   
+            lblPlayerNames[i].SetText(name);
 
         }
     }

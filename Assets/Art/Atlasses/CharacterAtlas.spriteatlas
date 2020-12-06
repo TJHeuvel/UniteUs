@@ -26,24 +26,36 @@ SpriteAtlas:
       padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
-      enableRotation: 1
-      enableTightPacking: 1
+      enableRotation: 0
+      enableTightPacking: 0
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 616f9f954fccb3c488ac9a51167d87f7, type: 3}
-    totalSpriteSurfaceArea: 64108
+    totalSpriteSurfaceArea: 122016
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 4d3740f34e2cd504997d07e87f920609, type: 3}
   - {fileID: 21300000, guid: 0a464bf505442604093a56ebcfea88b8, type: 3}
   - {fileID: 21300000, guid: c5108036f0e5e5b48b7c038de66632d5, type: 3}
+  - {fileID: 21300000, guid: bade67b765e0f174584712725d08bcdc, type: 3}
+  - {fileID: 21300000, guid: 2ae472d7e69ab7b4e9517da73c7ea949, type: 3}
+  - {fileID: 21300000, guid: cfeb5bc91b1693d4da8371609f55ec15, type: 3}
+  - {fileID: 21300000, guid: 80b27b5bdc50d034db212bb60422dc23, type: 3}
+  - {fileID: 21300000, guid: fa73dfee0ae5e664e94232d5e8d04675, type: 3}
   - {fileID: 21300000, guid: fcb13b7fa031ddd40bf6f7a7143a3709, type: 3}
   - {fileID: 21300000, guid: 7a03daff9e6a21a4c8eb041fa8845d9d, type: 3}
   m_PackedSpriteNamesToIndex:
+  - ghostGreen
   - shipGreen
   - shipBeige
+  - ghostPink
+  - ghostBlue
+  - shipYellow
+  - ghostYellow
+  - ghostBeige
   - shipBlue
   - shipPink
   m_Tag: CharacterAtlas

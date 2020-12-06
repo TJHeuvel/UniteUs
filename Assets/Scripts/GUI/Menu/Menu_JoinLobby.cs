@@ -20,7 +20,8 @@ class Menu_JoinLobby : MonoBehaviour
     {
         LobbyManager.Instance.OnLobbyJoined -= onLobbyJoined;
 
-        LobbyManager.Instance.LeaveLobby();
+        if (!LobbyManager.Instance.IsGameStarted)
+            LobbyManager.Instance.LeaveLobby();
     }
 
 

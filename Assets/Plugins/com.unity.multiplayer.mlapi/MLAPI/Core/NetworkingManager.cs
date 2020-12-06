@@ -59,12 +59,6 @@ namespace MLAPI
         /// <summary>
         /// The singleton instance of the NetworkingManager
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use Singleton instead", false)]
-        public static NetworkingManager singleton => Singleton;
-        /// <summary>
-        /// The singleton instance of the NetworkingManager
-        /// </summary>
         public static NetworkingManager Singleton { get; private set; }
         /// <summary>
         /// Gets the networkId of the server

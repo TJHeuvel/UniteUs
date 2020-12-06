@@ -364,7 +364,7 @@ namespace MLAPI
             }
         }
 
-        internal void VarUpdate()
+        public void VarUpdate()
         {
             if (!varInit)
                 InitializeVars();

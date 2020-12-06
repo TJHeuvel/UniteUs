@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-class MoveAbout : MonoBehaviour
+class LocalPlayerMovementController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 5f, collisionRadius = 0.6f, skinWidth = 0.01f;
     
