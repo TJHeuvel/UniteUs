@@ -140,9 +140,7 @@ namespace MLAPI.Prototyping
         }
 
         private void Update()
-        {
-            if (!NetworkingManager.Singleton.IsConnectedClient) return;
-
+        {            
             if (IsOwner)
             {
                 if (NetworkingManager.Singleton.NetworkTime - lastSendTime >= (1f / FixedSendsPerSecond) && (Vector3.Distance(transform.position, lastSentPos) > MinMeters || Quaternion.Angle(transform.rotation, lastSentRot) > MinDegrees))
