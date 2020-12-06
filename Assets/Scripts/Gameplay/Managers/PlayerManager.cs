@@ -3,10 +3,10 @@ using UnityEngine;
 using System.Linq;
 using MLAPI.Transports.UNET;
 
-class PlayerSpawnManager : NetworkedBehaviour
+class PlayerManager : NetworkedBehaviour
 {
     const float TAU = Mathf.PI * 2;
-    public static PlayerSpawnManager Instance { get; private set; }
+    public static PlayerManager Instance { get; private set; }
     [SerializeField]
     private PlayerController localPlayerPrefab,
                             otherPlayerPrefab;

@@ -16,16 +16,18 @@ class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private PlayerInteractInTrigger interactTrigger;
 
-    private int playerIndex;
+    public int PlayerIndex { get; private set; }
+    public Sprite Sprite => playerRenderer.sprite;
+
     public bool IsAlive { get; private set; } = true;
     public NetworkPlayer NetworkPlayer { get; private set; }
     public PlayerRole Role => NetworkPlayer.Role;
     public void SetPlayer(NetworkPlayer player, int index)
     {
         this.NetworkPlayer = player;
-        this.playerIndex = index;
+        this.PlayerIndex = index;
 
-        playerRenderer.sprite = playerTextures[playerIndex];
+        playerRenderer.sprite = playerTextures[PlayerIndex];
         lblPlayerName.text = player.Name;
 
         if (player.Role == PlayerRole.Imposter)
@@ -36,8 +38,9 @@ class PlayerController : MonoBehaviour
     }
     public void Die()
     {
+        Debug.Log("DIE " + this, this);
         IsAlive = false;
-        playerRenderer.sprite = ghostTextures[playerIndex];
+        playerRenderer.sprite = ghostTextures[PlayerIndex];
         animator.SetBool("Dead", true);
 
         interactTrigger.enabled = true;

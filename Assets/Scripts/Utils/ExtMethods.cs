@@ -1,7 +1,33 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using MLAPI.Transports.Tasks;
 using UnityEngine;
+
+static class ExtMethods
+{
+
+    public static int IndexOf<T>(this IEnumerable<T> collection, T element)
+    {
+        return IndexOf(collection, t => t.Equals(element));
+    }
+    public static int IndexOf<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
+    {
+        int index = 0;
+
+        var it = collection.GetEnumerator();
+
+        while (it.MoveNext())
+        {
+            if (predicate(it.Current)) return index;
+
+            index++;
+        }
+        return -1;
+    }
+
+}
 
 
 static class TaskUtils

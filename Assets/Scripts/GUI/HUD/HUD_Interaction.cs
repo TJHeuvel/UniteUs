@@ -20,35 +20,10 @@ class HUD_Interaction : MonoBehaviour
         PlayerInteractInTrigger.OnTriggerEnter -= onEnteredTrigger;
         PlayerInteractInTrigger.OnTriggerExit -= onExitedTrigger;
     }
-
-    private void onExitedTrigger(PlayerInteractInTrigger obj)
-    {
-        triggers.Remove(obj);
-
-        if (obj.Interaction == InteractionType.Use)
-            SetUseButtonEnabled(false);
-        else if (obj.Interaction == InteractionType.Kill)
-            SetKillButtonEnabled(false);
-        else if (obj.Interaction == InteractionType.Report)
-            SetReportButtonEnabled(false);
-    }
-
-    private void onEnteredTrigger(PlayerInteractInTrigger obj)
-    {
-        triggers.Add(obj);
-
-        if (obj.Interaction == InteractionType.Use)
-            SetUseButtonEnabled(true);
-        else if (obj.Interaction == InteractionType.Kill)
-            SetKillButtonEnabled(true);
-        else if (obj.Interaction == InteractionType.Report)
-            SetReportButtonEnabled(true);
-    }
-
     void Start()
     {
-        SetUseButtonVisiblity(PlayerSpawnManager.Instance.LocalPlayer.Role == PlayerRole.Civilian);
-        SetKillButtonVisibility(PlayerSpawnManager.Instance.LocalPlayer.Role == PlayerRole.Imposter);
+        SetUseButtonVisiblity(PlayerManager.Instance.LocalPlayer.Role == PlayerRole.Civilian);
+        SetKillButtonVisibility(PlayerManager.Instance.LocalPlayer.Role == PlayerRole.Imposter);
         SetUseButtonEnabled(false);
         SetKillButtonEnabled(false);
         SetReportButtonEnabled(false);
@@ -62,19 +37,46 @@ class HUD_Interaction : MonoBehaviour
     public void SetUseButtonEnabled(bool enabled) => btnUse.interactable = enabled;
     public void SetReportButtonEnabled(bool enabled) => btnReport.interactable = enabled;
 
+
+    //todo: get closest to current player?
+    private PlayerInteractInTrigger getTargetOfType(InteractionType type) =>  triggers.FirstOrDefault(t => t.Interaction == type);
+
     public void OnUseButtonClicked()
     {
 
     }
     public void OnKillButtonClicked()
     {
-        var killTarget = triggers.FirstOrDefault(t => t.Interaction == InteractionType.Kill);
-        killTarget.GetComponent<PlayerController>().Die();
+        var killTarget = getTargetOfType(InteractionType.Kill).GetComponent<PlayerController>();
+
+        killTarget.NetworkController.BroadcastPlayerKilled();
 
         SetKillButtonEnabled(false);
     }
     public void OnReportButtonClicked()
-    {
-
+    {        
+        PlayerManager.Instance.LocalPlayer.NetworkController.BroadcastPlayerReported();
+        
+        getTargetOfType(InteractionType.Report).enabled = false; //Players can only use the button once
     }
+
+
+    private void onExitedTrigger(PlayerInteractInTrigger obj)
+    {
+        triggers.Remove(obj);
+
+        SetUseButtonEnabled(triggers.Any(t => t.Interaction == InteractionType.Use));
+        SetKillButtonEnabled(triggers.Any(t => t.Interaction == InteractionType.Kill));
+        SetReportButtonEnabled(triggers.Any(t => t.Interaction == InteractionType.Report));
+    }
+
+    private void onEnteredTrigger(PlayerInteractInTrigger obj)
+    {
+        triggers.Add(obj);
+
+        SetUseButtonEnabled(triggers.Any(t => t.Interaction == InteractionType.Use));
+        SetKillButtonEnabled(triggers.Any(t => t.Interaction == InteractionType.Kill));
+        SetReportButtonEnabled(triggers.Any(t => t.Interaction == InteractionType.Report));
+    }
+
 }

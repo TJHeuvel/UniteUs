@@ -15,13 +15,13 @@ class PlayerInteractInTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!enabled || other.gameObject != PlayerSpawnManager.Instance.LocalPlayer.gameObject) return;
+        if (!enabled || other.gameObject != PlayerManager.Instance.LocalPlayer.gameObject) return;
 
         OnTriggerEnter?.Invoke(this);
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        if (!enabled || other.gameObject != PlayerSpawnManager.Instance.LocalPlayer.gameObject) return;
+        if (!enabled || other.gameObject != PlayerManager.Instance.LocalPlayer.gameObject) return;
 
         OnTriggerExit?.Invoke(this);
     }

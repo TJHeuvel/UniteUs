@@ -95,7 +95,7 @@ class LobbyManager : NetworkedBehaviour
         NetworkingManager.Singleton.OnClientConnectedCallback += onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback += onDisconnected;
         NetworkingManager.Singleton.OnServerStarted += onServerStarted;
-
+        NetworkingManager.Singleton.ConnectionApprovalCallback += onApprovalCallback;
         NetworkingManager.Singleton.StartHost();
     }
 
@@ -103,7 +103,7 @@ class LobbyManager : NetworkedBehaviour
     {
         if (NetworkingManager.Singleton.TryGetComponent<UnetTransport>(out var transport))
             transport.ConnectAddress = address;
-        
+
         NetworkingManager.Singleton.OnClientConnectedCallback += onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback += onDisconnected;
         var tasks = NetworkingManager.Singleton.StartClient();
@@ -121,6 +121,7 @@ class LobbyManager : NetworkedBehaviour
 
         if (NetworkingManager.Singleton.IsHost)
         {
+            NetworkingManager.Singleton.ConnectionApprovalCallback -= onApprovalCallback;
             NetworkingManager.Singleton.OnServerStarted -= onServerStarted;
             NetworkingManager.Singleton.StopHost();
         }
@@ -128,11 +129,17 @@ class LobbyManager : NetworkedBehaviour
         {
             NetworkingManager.Singleton.StopClient();
         }
-                
+
         NetworkingManager.Singleton.OnClientConnectedCallback -= onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback -= onDisconnected;
 
+        //Selfdestruct if we are playing. We'll go back to the menu scene, which makes a new lobby
+        if (IsGameStarted)
+            Destroy(gameObject);
     }
+
+    public NetworkPlayer[] ServerImposters { get; private set; }
+
     public void StartGame()
     {
         IsGameStarted = true;
@@ -146,12 +153,12 @@ class LobbyManager : NetworkedBehaviour
              * This is also nice because we can assume that we know the roles when we load into the new scene
              */
 
-            var imposters = Players.OrderBy(p => UnityEngine.Random.value).Take(GameSettings.Value.ImposterCount).ToArray();
+            ServerImposters = Players.OrderBy(p => UnityEngine.Random.value).Take(GameSettings.Value.ImposterCount).ToArray();
 
             foreach (var player in Players)
             {
-                if (imposters.Contains(player))
-                    InvokeClientRpcOnClient(clientStartGameImposter, player.ID, imposters.Where(i => i != player).Select(p => p.ID).ToArray());
+                if (ServerImposters.Contains(player))
+                    InvokeClientRpcOnClient(clientStartGameImposter, player.ID, ServerImposters.Where(i => i != player).Select(p => p.ID).ToArray());
                 else
                     InvokeClientRpcOnClient(clientStartGameCivilian, player.ID);
             }
@@ -190,6 +197,13 @@ class LobbyManager : NetworkedBehaviour
                 break;
         if (index < Players.Count) //make sure we know the player
             Players.RemoveAt(index);
+    }
+
+
+    private void onApprovalCallback(byte[] data, ulong id, NetworkingManager.ConnectionApprovedDelegate callback)
+    {
+        //Only allow when the game is not started yet. Not sure if this works
+        callback(false, null, IsGameStarted, null, null);
     }
 
     #endregion
