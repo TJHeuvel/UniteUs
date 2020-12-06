@@ -1,4 +1,4 @@
-I'm a Unity developer with about 10 years of experience, and a lot of experience with Photon. Every different team, and project, requires a different team setup, and in my experience i think i know what works and what doesnt. I'd like to use the experience i have, but its hard in the MLAPI. It seems to force the object-lifecycle on you, and i dont think it maps well to different types of games.
+I'm a Unity developer with about 10 years of experience, and a lot of experience with Photon. Every different team, and project, requires a different team setup, and in my experience i think i know what works and what doesnt. I'd like to use the experience i have, but its hard in the MLAPI. It seems to force the object-lifecycle on you, and i dont think it maps well to different types of games. Nor is the overall idea communicated particularly well, so i cant even easily get into it even if i wanted to. 
 
 - I really want to use the source code, not a DLL. It was a hassle to set that up, a separate UnityPackage would be nice. In the end i made assembly definition files for each folder, and removed Tests. 
 - I then had to add warning ignores to RelayTransport.cs, UnetTransport.cs
@@ -24,3 +24,4 @@ I’m very used to Relay, and i think there should be built in functionality for
 - My IDE is very slow because of the many rpc methods
 - Object visibility is annoying. I dont understand why i get a warning about object visibility and NetworkedTransform doesnt 
 - The name Singleton is weird. Instance says what it is, and is used by other unity things too.
+- Discord is really helpful
