@@ -35,6 +35,7 @@ class HUD_Vote : MonoBehaviour
         //Max for skip
         ulong votedId = selectedToggle > PlayerManager.Instance.Players.Length ? ulong.MaxValue : (ulong)selectedToggle;
 
+        PlayerManager.Instance.LocalPlayer.NetworkController.BroadcastVote(votedId);
 
         foreach (var tgl in tgglGroup.ActiveToggles())
             tgl.interactable = false;
@@ -63,7 +64,7 @@ class HUD_Vote : MonoBehaviour
         foreach (var tgl in tgglGroup.ActiveToggles())
             tgl.interactable = true;
     }
-    private void onPlayerVoted(PlayerController whoVoted, PlayerController votedWhat)
+    private void onPlayerVoted(PlayerController whoVoted, PlayerController whatVoted)
     {
         int whoPlayerRowIndex = lblPlayerNames.IndexOf(lbl => lbl.text == whoVoted.NetworkPlayer.Name);
 

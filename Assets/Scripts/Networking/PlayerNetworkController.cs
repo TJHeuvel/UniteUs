@@ -34,6 +34,7 @@ class PlayerNetworkController : NetworkedBehaviour
 
         InvokeClientRpcOnEveryone(clientPlayerDied);
     }
+
     [ClientRPC]
     private void clientPlayerDied() => playerController.Die();
 
@@ -54,5 +55,22 @@ class PlayerNetworkController : NetworkedBehaviour
     private void clientPlayerReported(ulong clientThatReported)
     {
         HUD_Vote.Instance.Show(clientThatReported);
+    }
+
+
+
+    public void BroadcastVote(ulong votedId)
+    {
+        InvokeServerRpc(serverPlayerVoted, votedId);
+    }
+    [ServerRPC(RequireOwnership = false)]
+    private void serverPlayerVoted(ulong voteId)
+    {
+        InvokeClientRpcOnEveryone(clientPlayerVoted, ExecutingRpcSender, voteId);
+    }
+    [ClientRPC]
+    private void clientPlayerVoted(ulong whoVoted, ulong votedWhat)
+    {
+        OnPlayerVoted?.Invoke(PlayerManager.Instance.GetPlayerById(whoVoted), PlayerManager.Instance.GetPlayerById(votedWhat));
     }
 }
