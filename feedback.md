@@ -15,4 +15,12 @@ I’m very used to Relay, and i think there should be built in functionality for
 - Ive so far spend about one day getting a simple lobby to work. In Photon this is built in.
 - My NetworkedList just doesnt work out of the box. I dont see a lot of documentation. It doesnt work because its not a spawnedobject, i dont see why i need that. I hacked the framework to expose VarUpdate…
  i have this in my scene, why do i need to spawn it? I could just set an id myself? I dont understand because in my first scene i have a similar setup and i do not need to spawn it, but the second scene i do? I want to manage the lifecycle of my objects myself. I made a SceneNetworkObject to manually call SpawnNetworkObjectLocally, that works. 
-
+- I like syncvars! Didnt think i'd use them, but they are quite sweet
+- The documentation is divided in several sections, i dont know when to look in advanced or in core concepts
+- Networkvar serialization should be possible with new generic serialization?
+- Why does BitReader.ReadByte return an int, not a byte?
+- I find bitreader/writer confusing, i always forget that a single is a float. Why isnt it ReadFloat? But it is ReadFloatArray.
+- RPC Methods now accept an array of ulong target, it would be nice if it was an IENumerable<ulong>. It would be more flexible
+- My IDE is very slow because of the many rpc methods
+- Object visibility is annoying. I dont understand why i get a warning about object visibility and NetworkedTransform doesnt 
+- The name Singleton is weird. Instance says what it is, and is used by other unity things too.

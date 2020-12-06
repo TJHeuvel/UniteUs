@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 using MLAPI.NetworkedVar.Collections;
 using MLAPI.Messaging;
 using UnityEngine.SceneManagement;
+using MLAPI.NetworkedVar;
+using MLAPI.Serialization;
+using System.IO;
+using MLAPI.Serialization.Pooled;
+using System.Linq;
 
+//TODO: Reject players after the game started
+//TODO: Properly handle disconnceting players also ingame
 class LobbyManager : NetworkedBehaviour
 {
     public event Action OnLobbyJoined, OnLobbyLeft;
@@ -14,29 +21,52 @@ class LobbyManager : NetworkedBehaviour
     public bool IsGameStarted { get; private set; }
 
     public NetworkedList<NetworkPlayer> Players = new NetworkedList<NetworkPlayer>(
-          new MLAPI.NetworkedVar.NetworkedVarSettings()
+          new NetworkedVarSettings()
           {
-              ReadPermission = MLAPI.NetworkedVar.NetworkedVarPermission.Everyone,
-              WritePermission = MLAPI.NetworkedVar.NetworkedVarPermission.Everyone,
-              SendTickrate = 5
+              ReadPermission = NetworkedVarPermission.Everyone,
+              WritePermission = NetworkedVarPermission.Everyone
           });
+    public NetworkPlayer GetPlayerById(ulong playerId)
+    {
+        for (int i = 0; i < Players.Count; i++)
+            if (Players[i].ID == playerId) return Players[i];
+        return null;
+    }
+    public NetworkPlayer GetLocalPlayer() => GetPlayerById(NetworkingManager.Singleton.LocalClientId);
 
-    public void StartGame()
+    [System.Serializable]
+    public class GameSettingsData : IBitWritable
     {
-        IsGameStarted = true;
-        if (IsServer)
-            InvokeClientRpcOnEveryone(clientStartGame);
+        public int ImposterCount = 1;
+        public float MovementSpeed = 5f;
+
+        public void Read(Stream stream)
+        {
+            using (PooledBitReader reader = PooledBitReader.Get(stream))
+            {
+                ImposterCount = reader.ReadByte();
+                MovementSpeed = reader.ReadSingle();
+            }
+        }
+        public void Write(Stream stream)
+        {
+            using (PooledBitWriter writer = PooledBitWriter.Get(stream))
+            {
+                writer.WriteByte((byte)ImposterCount);
+                writer.WriteSingle(MovementSpeed);
+            }
+
+        }
     }
-    [ClientRPC]
-    private void clientStartGame()
+    public NetworkedVar<GameSettingsData> GameSettings = new NetworkedVar<GameSettingsData>(new NetworkedVarSettings()
     {
-        IsGameStarted = true;
-        SceneManager.LoadScene("game");
-    }
+        ReadPermission = NetworkedVarPermission.Everyone,
+        WritePermission = NetworkedVarPermission.Everyone //todo: figure out if we can get the host only?
+    });
 
 
     public static LobbyManager Instance { get; private set; }
-    
+
     void OnEnable()
     {
         Instance = this;
@@ -53,6 +83,7 @@ class LobbyManager : NetworkedBehaviour
         if (NetworkingManager.Singleton.IsListening)
             VarUpdate();
     }
+
     #region Lobby Creating and Leaving
 
     public void CreateLobby()
@@ -63,8 +94,6 @@ class LobbyManager : NetworkedBehaviour
 
         NetworkingManager.Singleton.StartHost();
     }
-
-
 
     public async void JoinLobby(string address)
     {
@@ -97,6 +126,30 @@ class LobbyManager : NetworkedBehaviour
         NetworkingManager.Singleton.OnClientDisconnectCallback -= onDisconnected;
 
     }
+    public void StartGame()
+    {
+        IsGameStarted = true;
+        if (IsServer)
+        {
+            /*
+             * First i tried setting the role when the game has started.
+             * I had issues with the order of things, first i spawned a player and then tried to send a role to them.
+             * Because of object visibility this wouldnt work, the object wasnt visible to other players yet. 
+             *
+             * This is also nice because we can assume that we know the roles when we load into the new scene
+             */
+
+            var imposters = Players.OrderBy(p => UnityEngine.Random.value).Take(GameSettings.Value.ImposterCount).ToArray();
+
+            foreach (var player in Players)
+            {
+                if (imposters.Contains(player))
+                    InvokeClientRpcOnClient(clientStartGameImposter, player.ID, imposters.Where(i => i != player).Select(p => p.ID).ToArray());
+                else
+                    InvokeClientRpcOnClient(clientStartGameCivilian, player.ID);
+            }
+        }
+    }
     #endregion
 
     #region Callbacks
@@ -109,11 +162,11 @@ class LobbyManager : NetworkedBehaviour
     private void onConnected(ulong id)
     {
         if (id == NetworkingManager.Singleton.LocalClientId)
-        {            
+        {
             string userName = SystemInfo.deviceName;
             if (Application.isEditor)
                 userName += " (Editor)";
-     
+
             Players.Add(new NetworkPlayer()
             {
                 ID = id,
@@ -135,6 +188,23 @@ class LobbyManager : NetworkedBehaviour
     #endregion
 
     #region RPC
+    [ClientRPC]
+    private void clientStartGameCivilian()
+    {
+        GetLocalPlayer().Role = PlayerRole.Civilian;
+        IsGameStarted = true;
+        SceneManager.LoadScene("game");
+    }
+    [ClientRPC]
+    private void clientStartGameImposter(ulong[] otherImposters)
+    {
+        GetLocalPlayer().Role = PlayerRole.Imposter;
+        foreach (var id in otherImposters)
+            GetPlayerById(id).Role = PlayerRole.Imposter;
+
+        IsGameStarted = true;
+        SceneManager.LoadScene("game");
+    }
 
     #endregion
 #if UNITY_EDITOR

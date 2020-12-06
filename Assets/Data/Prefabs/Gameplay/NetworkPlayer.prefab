@@ -166,6 +166,7 @@ MonoBehaviour:
   playerRenderer: {fileID: 1143828364380426897}
   lblPlayerName: {fileID: 6957350942080678507}
   animator: {fileID: 6896322991066574727}
+  NetworkController: {fileID: 1656895768895317381}
 --- !u!114 &1656895768895317381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +180,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 232371829223838839}
-  networkedObject: {fileID: 6570112219457370908}
 --- !u!114 &6570112219457370908
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,11 +7,11 @@ class NetworkPlayer : IBitWritable
 {
     public ulong ID { get; set; }
     public string Name { get; set; }
+    public PlayerRole Role { get; set; } = PlayerRole.Unknown;
 
     public bool IsLocal => ID == MLAPI.NetworkingManager.Singleton.LocalClientId;
 
-
-    public override string ToString() => $"{ID} : {Name} ({(IsLocal ? "(local)" : "")})";
+    public override string ToString() => $"{ID} : {Name} ({(IsLocal ? "(local)" : "")} {Role})";
 
     public void Read(Stream stream)
     {

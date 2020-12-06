@@ -233,6 +233,14 @@ namespace MLAPI
 
             SpawnManager.SendSpawnCallForObject(clientId, this, payload);
         }
+        public void NetworkShowLocal(ulong clientId)
+        {
+            observers.Add(clientId);
+        }
+        public void NetworkHideLocal(ulong clientId)
+        {
+            observers.Remove(clientId);
+        }
 
         /// <summary>
         /// Shows a list of previously hidden objects to a client

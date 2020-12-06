@@ -4985,7 +4985,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367261508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 606.5, y: 277.0221, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5023,6 +5023,7 @@ MonoBehaviour:
   localPlayerPrefab: {fileID: 3960156228490746928, guid: 78a05c9b63ab5ae4497f4d8dca9a6c4f, type: 3}
   otherPlayerPrefab: {fileID: 232371829223838839, guid: 3715a392f0dcf4d48a9655710bcf9f1e, type: 3}
   virtualCam: {fileID: 218136193}
+  spawnRadius: 3
 --- !u!114 &367261512
 MonoBehaviour:
   m_ObjectHideFlags: 0
