@@ -1,6 +1,7 @@
 ﻿using MLAPI;
 using UnityEngine;
 using System.Linq;
+using MLAPI.Transports.UNET;
 
 class PlayerSpawnManager : NetworkedBehaviour
 {
@@ -26,8 +27,11 @@ class PlayerSpawnManager : NetworkedBehaviour
         if (LobbyManager.Instance == null)
         {
             //i should probably just start a host
+
             gameObject.AddComponent<NetworkingManager>();
+            NetworkingManager.Singleton.NetworkConfig = new MLAPI.Configuration.NetworkConfig() { EnableNetworkedVar = true, NetworkTransport = gameObject.AddComponent<UnetTransport>() };
             gameObject.AddComponent<LobbyManager>();
+
 
             LocalPlayer = Instantiate(localPlayerPrefab);
             LocalPlayer.SetPlayer(new NetworkPlayer()

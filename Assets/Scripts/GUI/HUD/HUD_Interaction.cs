@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 class HUD_Interaction : MonoBehaviour
 {
     [SerializeField] private Button btnUse, btnKill, btnReport;
+    private List<PlayerInteractInTrigger> triggers = new List<PlayerInteractInTrigger>();
+
 
     void OnEnable()
     {
@@ -19,6 +23,8 @@ class HUD_Interaction : MonoBehaviour
 
     private void onExitedTrigger(PlayerInteractInTrigger obj)
     {
+        triggers.Remove(obj);
+
         if (obj.Interaction == InteractionType.Use)
             SetUseButtonEnabled(false);
         else if (obj.Interaction == InteractionType.Kill)
@@ -29,6 +35,8 @@ class HUD_Interaction : MonoBehaviour
 
     private void onEnteredTrigger(PlayerInteractInTrigger obj)
     {
+        triggers.Add(obj);
+
         if (obj.Interaction == InteractionType.Use)
             SetUseButtonEnabled(true);
         else if (obj.Interaction == InteractionType.Kill)
@@ -60,7 +68,10 @@ class HUD_Interaction : MonoBehaviour
     }
     public void OnKillButtonClicked()
     {
+        var killTarget = triggers.FirstOrDefault(t => t.Interaction == InteractionType.Kill);
+        killTarget.GetComponent<PlayerController>().Die();
 
+        SetKillButtonEnabled(false);
     }
     public void OnReportButtonClicked()
     {

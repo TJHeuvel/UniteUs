@@ -3,10 +3,10 @@
 enum PlayerRole
 {
     Unknown,
-    Civilian, 
+    Civilian,
     Imposter
 }
-class PlayerController : MonoBehaviour 
+class PlayerController : MonoBehaviour
 {
     public PlayerNetworkController NetworkController;
 
@@ -42,5 +42,8 @@ class PlayerController : MonoBehaviour
 
         interactTrigger.enabled = true;
         interactTrigger.Interaction = InteractionType.Report;
+
+        if (TryGetComponent<LocalPlayerMovementController>(out var movement))
+            movement.enabled = false;
     }
 }
