@@ -47,7 +47,7 @@ class HUD_Vote : MonoBehaviour
         gameObject.SetActive(true);
         int index = 0;
 
-        foreach (var player in PlayerManager.Instance.Players.OrderBy(p => p.IsAlive))
+        foreach (var player in PlayerManager.Instance.Players.OrderByDescending(p => p.IsAlive))
         {
             lblPlayerNames[index].SetText(player.NetworkPlayer.Name);
             imgPlayerSprites[index].sprite = player.Sprite;

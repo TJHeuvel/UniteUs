@@ -180,7 +180,8 @@ class LobbyManager : NetworkedBehaviour
             string userName = SystemInfo.deviceName;
             if (Application.isEditor)
                 userName += " (Editor)";
-
+            else
+                userName += System.Diagnostics.Process.GetCurrentProcess().Id;
             Players.Add(new NetworkPlayer()
             {
                 ID = id,

@@ -14,7 +14,7 @@ class GameManager : NetworkedBehaviour
         Instance = null;
     }
 
-    public int TotalTaskCount { get; private set; }
+    public int TotalTaskCount { get; private set; } = 100;
     public int CompletedTaskCount { get; private set; }
 
 
