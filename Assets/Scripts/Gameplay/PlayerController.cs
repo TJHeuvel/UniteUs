@@ -11,6 +11,7 @@ class PlayerController : MonoBehaviour
     [SerializeField] private Sprite[] playerTextures, ghostTextures;
     [SerializeField] private SpriteRenderer playerRenderer;
     [SerializeField] private TMPro.TextMeshPro lblPlayerName;
+    [SerializeField] private Animator animator;
 
     private int playerIndex;
     public bool IsAlive { get; private set; } = true;
@@ -36,5 +37,6 @@ class PlayerController : MonoBehaviour
     {
         IsAlive = false;
         playerRenderer.sprite = ghostTextures[playerIndex];
+        animator.SetBool("Dead", true);
     }
 }
