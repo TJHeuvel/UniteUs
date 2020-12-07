@@ -52,7 +52,7 @@ public class RPCResponseAwaiter<T> : INotifyCompletion
     }
     private async void pollUntilDone()
     {
-        while (!IsCompleted && Application.isPlaying) await Task.Yield();
+        while (Application.isPlaying && !IsCompleted) await Task.Yield();
         continuation?.Invoke();
     }
 
@@ -81,7 +81,7 @@ public class SocketTasksAwaiter : INotifyCompletion
 
     private async void pollUntilDone()
     {
-        while (!IsCompleted && Application.isPlaying) await Task.Yield();
+        while (Application.isPlaying && !IsCompleted) await Task.Yield();
         continuation?.Invoke();
     }
 

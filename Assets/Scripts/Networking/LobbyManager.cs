@@ -90,13 +90,17 @@ class LobbyManager : NetworkedBehaviour
 
     #region Lobby Creating and Leaving
 
-    public void CreateLobby()
+    public async void CreateLobby()
     {
         NetworkingManager.Singleton.OnClientConnectedCallback += onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback += onDisconnected;
         NetworkingManager.Singleton.OnServerStarted += onServerStarted;
         NetworkingManager.Singleton.ConnectionApprovalCallback += onApprovalCallback;
-        NetworkingManager.Singleton.StartHost();
+        
+        var success = await NetworkingManager.Singleton.StartHost();
+        
+        if (success)
+            OnLobbyJoined?.Invoke();
     }
 
     public async void JoinLobby(string address)
@@ -106,18 +110,16 @@ class LobbyManager : NetworkedBehaviour
 
         NetworkingManager.Singleton.OnClientConnectedCallback += onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback += onDisconnected;
-        var tasks = NetworkingManager.Singleton.StartClient();
-
-        while (!tasks.IsDone) await Task.Yield();
         //todo: error checking
-        OnLobbyJoined?.Invoke();
+
+        var success = await NetworkingManager.Singleton.StartClient();
+        if (success)
+            OnLobbyJoined?.Invoke();
     }
 
     public void LeaveLobby()
     {
         if (NetworkingManager.Singleton == null) return;
-
-        Players.Clear();
 
         if (NetworkingManager.Singleton.IsHost)
         {
@@ -132,6 +134,9 @@ class LobbyManager : NetworkedBehaviour
 
         NetworkingManager.Singleton.OnClientConnectedCallback -= onConnected;
         NetworkingManager.Singleton.OnClientDisconnectCallback -= onDisconnected;
+
+        //Do this after stopping, otherwise we might clear all players!
+        Players.Clear();
 
         //Selfdestruct if we are playing. We'll go back to the menu scene, which makes a new lobby
         if (IsGameStarted)
