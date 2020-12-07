@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using MLAPI.Messaging;
 using MLAPI.Transports.Tasks;
 using UnityEngine;
 
@@ -30,16 +32,42 @@ static class ExtMethods
 }
 
 
-static class TaskUtils
+public static class TaskUtils
 {
+    public static SocketTasksAwaiter GetAwaiter(this SocketTasks sockets) => new SocketTasksAwaiter(sockets);
+    public static SocketTasksAwaiter GetAwaiter(this SocketTask socket) => new SocketTasksAwaiter(socket.AsTasks());
 
-    //public static SocketTasksAwaiter GetAwaiter(this SocketTasks sockets)
-    //{
-    //    return new SocketTasksAwaiter(sockets);
-    //}
+    public static RPCResponseAwaiter<T> GetAwaiter<T>(this RpcResponse<T> self) => new RPCResponseAwaiter<T>(self);
 }
 
-struct SocketTasksAwaiter : INotifyCompletion
+public class RPCResponseAwaiter<T> : INotifyCompletion
+{
+    private RpcResponse<T> response;
+    private Action continuation;
+
+    public RPCResponseAwaiter(RpcResponse<T> response)
+    {
+        this.response = response;
+        pollUntilDone();
+    }
+    private async void pollUntilDone()
+    {
+        while (!IsCompleted && Application.isPlaying) await Task.Yield();
+        continuation?.Invoke();
+    }
+
+    public void OnCompleted(Action continuation)
+    {
+        if (response.IsDone)
+            continuation();
+        this.continuation = continuation;
+    }
+    public bool IsCompleted => response.IsDone;
+
+    public T GetResult() => response.Value;
+}
+
+public class SocketTasksAwaiter : INotifyCompletion
 {
     private SocketTasks sockets;
     private Action continuation;
@@ -47,6 +75,14 @@ struct SocketTasksAwaiter : INotifyCompletion
     {
         this.sockets = sockets;
         continuation = null;
+
+        pollUntilDone();
+    }
+
+    private async void pollUntilDone()
+    {
+        while (!IsCompleted && Application.isPlaying) await Task.Yield();
+        continuation?.Invoke();
     }
 
     public void OnCompleted(Action continuation)
@@ -57,12 +93,6 @@ struct SocketTasksAwaiter : INotifyCompletion
         this.continuation = continuation;
     }
 
-    public bool IsCompleted
-    {
-        get
-        {
-            return sockets.IsDone;
-        }
-    }
-    public void GetResult() { }
+    public bool IsCompleted => sockets.IsDone;
+    public bool GetResult() => sockets.Success;
 }
