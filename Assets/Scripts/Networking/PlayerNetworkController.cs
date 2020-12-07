@@ -6,7 +6,8 @@ using UnityEngine;
 
 class PlayerNetworkController : NetworkedBehaviour
 {
-    public static Action<PlayerController, PlayerController> OnPlayerVoted;
+    public Action<PlayerController> OnPlayerVoted; //WhoVoted, VotedOn
+    public static Action<PlayerController> OnPlayerReported; //make up your mind if events are static or not!
 
     const ulong PlayerNetworkIdOffset = 100;
     [SerializeField] private PlayerController playerController;
@@ -48,29 +49,40 @@ class PlayerNetworkController : NetworkedBehaviour
         if (IsHost && HUD_Vote.Instance.gameObject.activeInHierarchy) return; //We're voting (TODO: Implement on server too)
         if (!playerController.IsAlive) return; //The player has died since pressing report.
 
-        InvokeClientRpcOnEveryone(clientPlayerReported, ExecutingRpcSender);
+        InvokeClientRpcOnEveryone(clientPlayerReported);
     }
-
     [ClientRPC]
-    private void clientPlayerReported(ulong clientThatReported)
+    private void clientPlayerReported()
     {
-        HUD_Vote.Instance.Show(clientThatReported);
+        OnPlayerReported?.Invoke(playerController);
+
+        //Clear current votes
+        foreach (var p in PlayerManager.Instance.Players)
+            p.NetworkController.PlayerVotedOn = null;
     }
 
 
-
-    public void BroadcastVote(ulong votedId)
+    //todo: Validate a player can only vote once per round, locally and on the server. and its within vote period A bit tricky, playervotedon is null when skipped too
+    /// <summary>
+    /// Make a player vote on someone. ulong.maxvalue for skip
+    /// </summary>
+    /// <param name="whoToVoteOn"></param>
+    public void BroadcastVote(ulong whoToVoteOn)
     {
-        InvokeServerRpc(serverPlayerVoted, votedId);
+        if (playerController.IsAlive)
+            InvokeServerRpc(serverPlayerVoted, whoToVoteOn);
     }
     [ServerRPC(RequireOwnership = false)]
-    private void serverPlayerVoted(ulong voteId)
+    private void serverPlayerVoted(ulong whoToVoteOn)
     {
-        InvokeClientRpcOnEveryone(clientPlayerVoted, ExecutingRpcSender, voteId);
+        if (PlayerManager.Instance.GetPlayerById(ExecutingRpcSender).IsAlive)
+            InvokeClientRpcOnEveryone(clientPlayerVoted, whoToVoteOn);
     }
     [ClientRPC]
-    private void clientPlayerVoted(ulong whoVoted, ulong votedWhat)
+    private void clientPlayerVoted(ulong votedOn)
     {
-        OnPlayerVoted?.Invoke(PlayerManager.Instance.GetPlayerById(whoVoted), PlayerManager.Instance.GetPlayerById(votedWhat));
+        PlayerVotedOn = PlayerManager.Instance.GetPlayerById(votedOn);
+        OnPlayerVoted?.Invoke(PlayerVotedOn);
     }
+    public PlayerController PlayerVotedOn { get; private set; } //todo: clear
 }

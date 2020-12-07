@@ -1,16 +1,27 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using MLAPI;
 using MLAPI.Messaging;
+using UnityEngine;
 
+//This does most gameplay related logic and networking, like voting and tasks.
+//I should probably keep some sort of enum for gamestate. Or split this up in TaskManager and VoteManager
 class GameManager : NetworkedBehaviour
 {
+    public Action OnVotePeriodEnded;
+
     public static GameManager Instance { get; private set; }
     void OnEnable()
     {
         Instance = this;
+
+        PlayerNetworkController.OnPlayerReported += onPlayerReported;
     }
+
     void OnDisable()
     {
+        PlayerNetworkController.OnPlayerReported -= onPlayerReported;
         Instance = null;
     }
 
@@ -41,4 +52,22 @@ class GameManager : NetworkedBehaviour
     }
     [ClientRPC]
     private void onGameEnded(bool wonByImposters, ulong[] imposters) => HUD_GameOver.Instance.ShowResult(wonByImposters, imposters);
+
+        
+    private void onPlayerReported(PlayerController whoReported)
+    {
+        VoteStartTime = Time.time;
+        VoteEndTime = VoteStartTime + LobbyManager.Instance.GameSettings.Value.VoteDuration;
+
+        StartCoroutine(waitForVotePeriodToEnd());    
+    }
+    public float VoteStartTime { get; private set; }
+    public float VoteEndTime { get; private set; }
+    public float VoteTimeLeft => VoteEndTime - Time.time;
+
+    private IEnumerator waitForVotePeriodToEnd()
+    {
+        yield return new WaitForSeconds(LobbyManager.Instance.GameSettings.Value.VoteDuration);
+        OnVotePeriodEnded();
+    }
 }

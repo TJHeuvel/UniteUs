@@ -31,13 +31,14 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 660f0b8517f76df4ba9b5807be9ee005, type: 3}
-    totalSpriteSurfaceArea: 204976
+    totalSpriteSurfaceArea: 206128
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: be8c8420077a64043858f6085b51b80d, type: 3}
+  - {fileID: 21300000, guid: e025ea20e27f9d341ac1ab2860d31615, type: 3}
   - {fileID: 21300000, guid: 61f3c0c0cef143540a6cba4fc6670f31, type: 3}
   - {fileID: 21300000, guid: 6920f1d00b6090445b1cad0fc740a453, type: 3}
   - {fileID: 21300000, guid: 0f18adf08b100b74d825018f0b1fe69b, type: 3}
@@ -99,6 +100,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 47a00ebb7a499da45a228349ea342725, type: 3}
   - {fileID: 21300000, guid: 9765ebfbe3c58644e8d4081e95f526f3, type: 3}
   - {fileID: 21300000, guid: 12a0000c3e5903548be7e4107244158b, type: 3}
+  - {fileID: 21300000, guid: 09297a0c2700b5243bb845275b1060b7, type: 3}
   - {fileID: 21300000, guid: 7806838cf6fd56d4689557e57cc420d7, type: 3}
   - {fileID: 21300000, guid: 213a991d28c654f4e8bc93be1cce954f, type: 3}
   - {fileID: 21300000, guid: a939952dcc643624da20b7b905457cec, type: 3}
@@ -118,6 +120,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 952519df87d14764790a9085fe04f208, type: 3}
   m_PackedSpriteNamesToIndex:
   - crossair_red
+  - dotBeige
   - dotRed
   - barVertical_red_bottom
   - barHorizontal_yellow_right
@@ -179,6 +182,7 @@ SpriteAtlas:
   - crossair_blue
   - crossair_blackOutline
   - barHorizontal_green_left
+  - dotPink
   - barHorizontal_red_left
   - barVertical_white_mid
   - barVertical_blue_top

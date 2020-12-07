@@ -7,7 +7,7 @@ class Menu_CreateLobby : MonoBehaviour
 {
     [SerializeField] private HashProvider hashProvider;
     [SerializeField] private TMPro.TMP_InputField inptHash;
-    [SerializeField] private TMPro.TextMeshProUGUI lblCurrentImposterCount, lblMovementSpeed;
+    [SerializeField] private TMPro.TextMeshProUGUI lblCurrentImposterCount, lblMovementSpeed, lblVoteDuration;
     [SerializeField] private Slider sldrImposterCount, sldrMovementSpeed;
 
     void OnEnable()
@@ -21,6 +21,7 @@ class Menu_CreateLobby : MonoBehaviour
     {
         lblCurrentImposterCount.SetText(newValue.ImposterCount.ToString());
         lblMovementSpeed.SetText(newValue.MovementSpeed.ToString());
+        lblVoteDuration.SetText(newValue.VoteDuration.ToString());
     }
 
     void OnDisable()
@@ -44,7 +45,14 @@ class Menu_CreateLobby : MonoBehaviour
         settings.MovementSpeed = Mathf.RoundToInt(newValue);
         LobbyManager.Instance.GameSettings.Value = settings;
     }
-
+    
+    public void OnVoteDurationChanged(float newValue)
+    {
+        var settings = LobbyManager.Instance.GameSettings.Value;
+        settings.VoteDuration = Mathf.RoundToInt(newValue);
+        Debug.Log(settings);
+        LobbyManager.Instance.GameSettings.Value = settings;
+    }
     public void OnStartGameClicked()
     {
         LobbyManager.Instance.StartGame();

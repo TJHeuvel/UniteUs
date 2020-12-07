@@ -34,12 +34,13 @@ class LobbyManager : NetworkedBehaviour
     }
     public NetworkPlayer GetLocalPlayer() => GetPlayerById(NetworkingManager.Singleton.LocalClientId);
 
-    [System.Serializable]
+    [Serializable]
     public struct GameSettingsData : IBitWritable
     {
-        public static GameSettingsData Default => new GameSettingsData() { ImposterCount = 1, MovementSpeed = 6 };
+        public static GameSettingsData Default => new GameSettingsData() { ImposterCount = 1, MovementSpeed = 6, VoteDuration = 30 };
         public int ImposterCount;
         public float MovementSpeed;
+        public float VoteDuration;
 
         public void Read(Stream stream)
         {
@@ -47,6 +48,7 @@ class LobbyManager : NetworkedBehaviour
             {
                 ImposterCount = reader.ReadByte();
                 MovementSpeed = reader.ReadSingle();
+                VoteDuration = reader.ReadSingle();
             }
         }
         public void Write(Stream stream)
@@ -55,14 +57,17 @@ class LobbyManager : NetworkedBehaviour
             {
                 writer.WriteByte((byte)ImposterCount);
                 writer.WriteSingle(MovementSpeed);
+                writer.WriteSingle(VoteDuration);
             }
 
         }
+
+        public override string ToString() => $"Imposter count: {ImposterCount}\nMovement Speed: {MovementSpeed}\n Vote Duration: {VoteDuration}";
+        
     }
 
     public NetworkedVar<GameSettingsData> GameSettings = new NetworkedVar<GameSettingsData>(new NetworkedVarSettings()
     {
-
         ReadPermission = NetworkedVarPermission.Everyone,
         WritePermission = NetworkedVarPermission.Everyone //todo: figure out if we can get the host only?
 

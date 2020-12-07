@@ -2,15 +2,25 @@
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 class HUD_Vote : MonoBehaviour
 {
     public static HUD_Vote Instance { get; private set; }
 
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private TMPro.TextMeshProUGUI[] lblPlayerNames;
-    [SerializeField] private Image[] imgPlayerSprites, imgPlayerDead;
     [SerializeField] private ToggleGroup tgglGroup;
+    [SerializeField] private Button btnVote;
+    [SerializeField] private TMPro.TextMeshProUGUI lblTimeLeft;
+
+    [SerializeField] private HUD_Vote_Player[] playersRows;
+    [SerializeField] private Image[] imgSkipVotes;
+
+    void OnValidate()
+    {
+        playersRows = GetComponentsInChildren<HUD_Vote_Player>();
+    }
 
     void Awake()
     {
@@ -18,16 +28,23 @@ class HUD_Vote : MonoBehaviour
         Instance = this;
         gameObject.SetActive(false);
 
-        PlayerNetworkController.OnPlayerVoted += onPlayerVoted;
+        PlayerNetworkController.OnPlayerReported += Show;
+        GameManager.Instance.OnVotePeriodEnded += onVotePeriodEnded;
     }
 
     void OnDestroy()
     {
-        PlayerNetworkController.OnPlayerVoted -= onPlayerVoted;
+        PlayerNetworkController.OnPlayerReported -= Show;
+        GameManager.Instance.OnVotePeriodEnded -= onVotePeriodEnded;
         Instance = null;
     }
 
 
+    void Update()
+    {
+        lblTimeLeft.enabled = GameManager.Instance.VoteTimeLeft > 0;
+        lblTimeLeft.text = $"Time left: {GameManager.Instance.VoteTimeLeft:0}s";
+    }
     public void OnVoteClicked()
     {
         int selectedToggle = tgglGroup.ActiveToggles().IndexOf(tgglGroup.GetFirstActiveToggle());
@@ -40,33 +57,56 @@ class HUD_Vote : MonoBehaviour
         foreach (var tgl in tgglGroup.ActiveToggles())
             tgl.interactable = false;
 
+        btnVote.interactable = false;
     }
 
-    internal void Show(ulong clientThatReported)
+    public void Show(PlayerController clientThatReported)
     {
         gameObject.SetActive(true);
         int index = 0;
+        btnVote.interactable = true;
 
         foreach (var player in PlayerManager.Instance.Players.OrderByDescending(p => p.IsAlive))
-        {
-            lblPlayerNames[index].SetText(player.NetworkPlayer.Name);
-            imgPlayerSprites[index].sprite = player.Sprite;
-            imgPlayerDead[index].enabled = !player.IsAlive;
+            playersRows[index++].SetInfo(player, player == clientThatReported);
 
-            lblPlayerNames[index].fontStyle = player.NetworkPlayer.ID == clientThatReported ? TMPro.FontStyles.Italic : TMPro.FontStyles.Normal;
-
-            index++;
-        }
-
-        for (; index < lblPlayerNames.Length; index++)
-            lblPlayerNames[index].transform.parent.gameObject.SetActive(false);
+        for (; index < playersRows.Length; index++)
+            playersRows[index].SetInfo(null);
 
         foreach (var tgl in tgglGroup.ActiveToggles())
             tgl.interactable = true;
-    }
-    private void onPlayerVoted(PlayerController whoVoted, PlayerController whatVoted)
-    {
-        int whoPlayerRowIndex = lblPlayerNames.IndexOf(lbl => lbl.text == whoVoted.NetworkPlayer.Name);
 
+        for (int i = 0; i < imgSkipVotes.Length; i++)
+            imgSkipVotes[i].enabled = false;
+
+    }
+
+    private void onVotePeriodEnded()
+    {
+        Debug.Log("OnPeriodEnded");
+        btnVote.interactable = false;
+
+        foreach (var playerRow in playersRows)
+            playerRow.ShowVoted(PlayerManager.Instance.Players.Where(p => p.NetworkController.PlayerVotedOn == playerRow.TargetPlayer));
+        StartCoroutine(showVoteSkipped(PlayerManager.Instance.Players.Where(p => p.NetworkController.PlayerVotedOn == null)));
+
+        StartCoroutine(waitAndClose());
+    }
+
+    private IEnumerator waitAndClose()
+    {
+        yield return new WaitForSeconds(5f);
+        gameObject.SetActive(false);
+    }
+
+    private IEnumerator showVoteSkipped(IEnumerable<PlayerController> whoVotedSkipped)
+    {
+        var wait = new WaitForSeconds(.2f);
+        yield return wait;
+
+        foreach (var player in whoVotedSkipped)
+        {
+            imgSkipVotes[player.PlayerIndex].enabled = true;
+            yield return wait;
+        }
     }
 }

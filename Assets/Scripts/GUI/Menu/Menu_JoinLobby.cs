@@ -1,6 +1,4 @@
-﻿using System;
-using MLAPI;
-using UnityEngine;
+﻿using UnityEngine;
 
 class Menu_JoinLobby : MonoBehaviour
 {
@@ -18,8 +16,6 @@ class Menu_JoinLobby : MonoBehaviour
         LobbyManager.Instance.OnLobbyJoined += onLobbyJoined;
     }
 
-
-
     void OnDisable()
     {
         LobbyManager.Instance.OnLobbyJoined -= onLobbyJoined;
@@ -31,13 +27,12 @@ class Menu_JoinLobby : MonoBehaviour
 
     private void onGameSettingsChanged(LobbyManager.GameSettingsData previousValue, LobbyManager.GameSettingsData newValue)
     {
-        lblGameSettings.SetText($"Imposter count: {newValue.ImposterCount}\nMovement Speed: {newValue.MovementSpeed}");
+        lblGameSettings.SetText(newValue.ToString());
     }
     private void onLobbyJoined()
     {
         parentJoin.gameObject.SetActive(false);
         parentLobby.gameObject.SetActive(true);
-
     }
 
     public void OnJoinClicked()
