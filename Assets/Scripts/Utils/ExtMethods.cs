@@ -64,7 +64,7 @@ public class RPCResponseAwaiter<T> : INotifyCompletion
     }
     public bool IsCompleted => response.IsDone;
 
-    public T GetResult() => response.Value;
+    public RpcResponse<T> GetResult() => response;
 }
 
 public class SocketTasksAwaiter : INotifyCompletion
