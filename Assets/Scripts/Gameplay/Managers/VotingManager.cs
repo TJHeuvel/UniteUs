@@ -19,13 +19,21 @@ using System.Linq;
  * localX is some shared behaviour?
  * 
  * Validation is also something i want to do on both sides, and is often the same, e.g. CanPlayerVote is the same logic.
+ * 
+ * Had a discussion on discord, use NetworkedVar instead!
  */
 class VotingManager : NetworkedBehaviour
 {
-    public delegate void VoteStartedDelegate(NetworkPlayer whoReported);
+    public static VotingManager Instance { get; private set; }
 
+    void OnEnable() => Instance = this;
+    void OnDisable() => Instance = null;
+
+    public delegate void VoteStartedDelegate(NetworkPlayer whoReported); //Use a delegate instead of Action to specify a variable name, which reads nicer. 
+    public delegate void VoteCastDelegate(NetworkPlayer whoVoted, NetworkPlayer whoTheyVotedOn); //whatvotedon is null when its skip!
     public VoteStartedDelegate OnVotingStarted;
     public Action OnVotingEnded;
+    public VoteCastDelegate OnPlayerVoteCasted;
 
     public bool IsVoting { get; private set; }
     public float VoteStartTime { get; private set; }
@@ -43,11 +51,8 @@ class VotingManager : NetworkedBehaviour
     /// </summary>
     /// <param name="player">Who voted</param>
     /// <returns>Who they voted on</returns>
-    private NetworkPlayer GetPlayerVote(NetworkPlayer player)
+    public NetworkPlayer GetPlayerVote(NetworkPlayer player)
     {
-        if (!IsVoting)
-            throw new Exception("Trying to get a vote when we're not voting, this is not valid!");
-
         //return the target vote, or null (meaning skip) when the player didnt vote
         return votes.TryGetValue(player, out var votedOnWho) ? votedOnWho : null;
     }
@@ -67,14 +72,19 @@ class VotingManager : NetworkedBehaviour
         if (!IsVoting || votes.ContainsKey(LobbyManager.Instance.GetPlayerById(ExecutingRpcSender))) return;
 
         //Maybe check if we didnt vote on a dead player?
+        //This will go wrong in dedicated server!
 
         InvokeClientRpcOnEveryone(clientCastVote, ExecutingRpcSender, whoSenderVotedOn);
     }
 
     [ClientRPC]
-    private void clientCastVote(ulong whoVoted, ulong whoTheyVotedOn)
+    private void clientCastVote(ulong whoVotedID, ulong whoTheyVotedOnID)
     {
+        NetworkPlayer whoVoted = LobbyManager.Instance.GetPlayerById(whoVotedID),
+            whoTheyVotedOn = LobbyManager.Instance.GetPlayerById(whoTheyVotedOnID);
 
+        votes[whoVoted] = whoTheyVotedOn;
+        OnPlayerVoteCasted?.Invoke(whoVoted, whoTheyVotedOn);
     }
 
 
@@ -125,6 +135,6 @@ class VotingManager : NetworkedBehaviour
 
         OnVotingEnded?.Invoke();
         IsVoting = false;
-        votes.Clear();
+        //We dont want to clear votes here, because the UI still wants to show them even after voting has ended
     }
 }

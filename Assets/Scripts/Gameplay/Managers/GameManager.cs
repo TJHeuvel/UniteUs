@@ -9,25 +9,13 @@ using UnityEngine;
 //I should probably keep some sort of enum for gamestate. Or split this up in TaskManager and VoteManager
 class GameManager : NetworkedBehaviour
 {
-    public Action OnVotePeriodEnded;
-
     public static GameManager Instance { get; private set; }
-    void OnEnable()
-    {
-        Instance = this;
+    void OnEnable() => Instance = this;
+    void OnDisable() => Instance = null;
 
-        PlayerNetworkController.OnPlayerReported += onPlayerReported;
-    }
-
-    void OnDisable()
-    {
-        PlayerNetworkController.OnPlayerReported -= onPlayerReported;
-        Instance = null;
-    }
-
+    //TODO: Move to TaskManager
     public int TotalTaskCount { get; private set; } = 100;
     public int CompletedTaskCount { get; private set; }
-
 
     public void ServerCheckWinConditions()
     {
@@ -53,21 +41,5 @@ class GameManager : NetworkedBehaviour
     [ClientRPC]
     private void onGameEnded(bool wonByImposters, ulong[] imposters) => HUD_GameOver.Instance.ShowResult(wonByImposters, imposters);
 
-        
-    private void onPlayerReported(PlayerController whoReported)
-    {
-        VoteStartTime = Time.time;
-        VoteEndTime = VoteStartTime + LobbyManager.Instance.GameSettings.Value.VoteDuration;
 
-        StartCoroutine(waitForVotePeriodToEnd());    
-    }
-    public float VoteStartTime { get; private set; }
-    public float VoteEndTime { get; private set; }
-    public float VoteTimeLeft => VoteEndTime - Time.time;
-
-    private IEnumerator waitForVotePeriodToEnd()
-    {
-        yield return new WaitForSeconds(LobbyManager.Instance.GameSettings.Value.VoteDuration);
-        OnVotePeriodEnded();
-    }
 }

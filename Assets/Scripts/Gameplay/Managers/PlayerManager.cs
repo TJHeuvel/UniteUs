@@ -94,5 +94,5 @@ class PlayerManager : NetworkedBehaviour
     void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, spawnRadius);
-    }
+    }            
 }

@@ -54,8 +54,8 @@ class HUD_Interaction : MonoBehaviour
         SetKillButtonEnabled(false);
     }
     public void OnReportButtonClicked()
-    {        
-        PlayerManager.Instance.LocalPlayer.NetworkController.BroadcastPlayerReported();
+    {   
+        VotingManager.Instance.BroadcastVoteStart();
         
         getTargetOfType(InteractionType.Report).enabled = false; //Players can only use the button once
     }

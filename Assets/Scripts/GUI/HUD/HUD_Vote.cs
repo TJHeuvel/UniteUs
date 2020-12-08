@@ -25,49 +25,51 @@ class HUD_Vote : MonoBehaviour
     void Awake()
     {
         canvasGroup.alpha = 1f;
-        Instance = this;
-        gameObject.SetActive(false);
+        Instance = this;        
+    }
 
-        PlayerNetworkController.OnPlayerReported += Show;
-        GameManager.Instance.OnVotePeriodEnded += onVotePeriodEnded;
+    void Start()
+    {
+        VotingManager.Instance.OnVotingStarted += Show;
+        VotingManager.Instance.OnVotingEnded += onVotePeriodEnded;
+        gameObject.SetActive(false);        
     }
 
     void OnDestroy()
     {
-        PlayerNetworkController.OnPlayerReported -= Show;
-        GameManager.Instance.OnVotePeriodEnded -= onVotePeriodEnded;
+        if (VotingManager.Instance == null) return;
+        VotingManager.Instance.OnVotingStarted -= Show;
+        VotingManager.Instance.OnVotingEnded -= onVotePeriodEnded;
         Instance = null;
     }
 
 
     void Update()
-    {
-        lblTimeLeft.enabled = GameManager.Instance.VoteTimeLeft > 0;
-        lblTimeLeft.text = $"Time left: {GameManager.Instance.VoteTimeLeft:0}s";
+    {        
+        lblTimeLeft.text = $"Time left: {VotingManager.Instance.VoteTimeLeft:0}s";
     }
     public void OnVoteClicked()
     {
         int selectedToggle = tgglGroup.ActiveToggles().IndexOf(tgglGroup.GetFirstActiveToggle());
 
-        //Max for skip
-        ulong votedId = selectedToggle > PlayerManager.Instance.Players.Length ? ulong.MaxValue : (ulong)selectedToggle;
-
-        PlayerManager.Instance.LocalPlayer.NetworkController.BroadcastVote(votedId);
+        //Null when skipped
+        NetworkPlayer votedOn = selectedToggle > playersRows.Length ? null : playersRows[selectedToggle].TargetPlayer.NetworkPlayer;
+        
+        VotingManager.Instance.BroadcastPlayerVote(votedOn);        
 
         foreach (var tgl in tgglGroup.ActiveToggles())
             tgl.interactable = false;
-
         btnVote.interactable = false;
     }
 
-    public void Show(PlayerController clientThatReported)
+    public void Show(NetworkPlayer clientThatReported)
     {
         gameObject.SetActive(true);
         int index = 0;
         btnVote.interactable = true;
 
         foreach (var player in PlayerManager.Instance.Players.OrderByDescending(p => p.IsAlive))
-            playersRows[index++].SetInfo(player, player == clientThatReported);
+            playersRows[index++].SetInfo(player, player.NetworkPlayer == clientThatReported);
 
         for (; index < playersRows.Length; index++)
             playersRows[index].SetInfo(null);
@@ -81,13 +83,17 @@ class HUD_Vote : MonoBehaviour
     }
 
     private void onVotePeriodEnded()
-    {
-        Debug.Log("OnPeriodEnded");
+    {        
         btnVote.interactable = false;
 
-        foreach (var playerRow in playersRows)
-            playerRow.ShowVoted(PlayerManager.Instance.Players.Where(p => p.NetworkController.PlayerVotedOn == playerRow.TargetPlayer));
-        StartCoroutine(showVoteSkipped(PlayerManager.Instance.Players.Where(p => p.NetworkController.PlayerVotedOn == null)));
+        foreach(var row in playersRows.Where(p => p.TargetPlayer != null))
+        {
+            //Find all players that voted on the player that the row is showing.
+            //A LINQ Group is probably better suited
+            StartCoroutine(row.ShowVoted(PlayerManager.Instance.Players.Where(p => VotingManager.Instance.GetPlayerVote(p.NetworkPlayer) == row.TargetPlayer.NetworkPlayer)));
+        }
+
+        StartCoroutine(showVoteSkipped(PlayerManager.Instance.Players.Where(p => VotingManager.Instance.GetPlayerVote(p.NetworkPlayer) == null)));
 
         StartCoroutine(waitAndClose());
     }

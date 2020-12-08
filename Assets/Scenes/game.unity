@@ -5521,12 +5521,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 367261509}
-  - component: {fileID: 367261513}
-  - component: {fileID: 367261511}
   - component: {fileID: 367261510}
   - component: {fileID: 367261512}
+  - component: {fileID: 367261513}
+  - component: {fileID: 367261511}
+  - component: {fileID: 367261514}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5604,6 +5605,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a3db7319c38b49498815f3cdbcbf76e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &367261514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367261508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd16a7d101d79db43bc664390f75773e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &425318944
@@ -23022,7 +23035,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1326271122}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -23078,7 +23091,12 @@ MonoBehaviour:
   - {fileID: 183564072}
   - {fileID: 362616153}
   - {fileID: 2097295505}
-  imgSkipVotes: []
+  imgSkipVotes:
+  - {fileID: 1765273057}
+  - {fileID: 794952518}
+  - {fileID: 1014977151}
+  - {fileID: 1576605671}
+  - {fileID: 905071934}
 --- !u!222 &1326271127
 CanvasRenderer:
   m_ObjectHideFlags: 0

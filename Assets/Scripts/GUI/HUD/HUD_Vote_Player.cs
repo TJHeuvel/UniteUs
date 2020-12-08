@@ -37,18 +37,20 @@ class HUD_Vote_Player : MonoBehaviour
 
         for (int i = 0; i < imgPlayersVotedForMe.Length; i++)
             imgPlayersVotedForMe[i].enabled = false;
-
-        player.NetworkController.OnPlayerVoted += onPlayerVoted;
+        VotingManager.Instance.OnPlayerVoteCasted += onPlayerVoted;
     }
+
+
     void OnDisable()
     {
-        if (TargetPlayer != null)
-            TargetPlayer.NetworkController.OnPlayerVoted -= onPlayerVoted;
+        if (TargetPlayer != null && VotingManager.Instance != null)
+            VotingManager.Instance.OnPlayerVoteCasted -= onPlayerVoted;
     }
-
-    private void onPlayerVoted(PlayerController votedOn)
+    
+    private void onPlayerVoted(NetworkPlayer whoVoted, NetworkPlayer whoTheyVotedOn)
     {
-        imgPlayerVoted.enabled = true;
+        if (whoVoted == TargetPlayer.NetworkPlayer)
+            imgPlayerVoted.enabled = true;
     }
 
     public IEnumerator ShowVoted(IEnumerable<PlayerController> whoVotedOnMe)
