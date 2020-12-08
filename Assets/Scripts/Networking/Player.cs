@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using MLAPI.Serialization;
 using MLAPI.Serialization.Pooled;
-using UnityEngine;
 
 class NetworkPlayer : IBitWritable
 {
@@ -12,7 +11,9 @@ class NetworkPlayer : IBitWritable
     public bool IsLocal => ID == MLAPI.NetworkingManager.Singleton.LocalClientId;
 
     public override string ToString() => $"{ID} : {Name} ({(IsLocal ? "(local)" : "")} {Role})";
-
+    
+    //In the lobby i want to send a name, outside of that i just want to send an id and find it. It would make a lot of code much nicer.
+    //Maybe register/deregister a custom serializer?
     public void Read(Stream stream)
     {
         using (PooledBitReader reader = PooledBitReader.Get(stream))

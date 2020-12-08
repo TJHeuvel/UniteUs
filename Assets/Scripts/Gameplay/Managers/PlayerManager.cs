@@ -3,6 +3,9 @@ using UnityEngine;
 using System.Linq;
 using MLAPI.Transports.UNET;
 
+/// <summary>
+/// Handles spawning, dying and ghosting of players
+/// </summary>
 class PlayerManager : NetworkedBehaviour
 {
     const float TAU = Mathf.PI * 2;
