@@ -45,16 +45,19 @@ class HUD_Vote : MonoBehaviour
 
 
     void Update()
-    {        
+    {
+        lblTimeLeft.enabled = VotingManager.Instance.IsVoting;
         lblTimeLeft.text = $"Time left: {VotingManager.Instance.VoteTimeLeft:0}s";
     }
     public void OnVoteClicked()
     {
-        int selectedToggle = tgglGroup.ActiveToggles().IndexOf(tgglGroup.GetFirstActiveToggle());
-
         //Null when skipped
-        NetworkPlayer votedOn = selectedToggle > playersRows.Length ? null : playersRows[selectedToggle].TargetPlayer.NetworkPlayer;
-        
+        NetworkPlayer votedOn = null;
+        var selectedRow = playersRows.FirstOrDefault(r => r.IsSelected);
+
+        if (selectedRow != null)
+            votedOn = selectedRow.TargetPlayer.NetworkPlayer;
+
         VotingManager.Instance.BroadcastPlayerVote(votedOn);        
 
         foreach (var tgl in tgglGroup.ActiveToggles())

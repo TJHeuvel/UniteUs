@@ -58,11 +58,12 @@ class VotingManager : NetworkedBehaviour
     }
 
     
+    //PlayerToVote is null to skip
     public void BroadcastPlayerVote(NetworkPlayer playerToVoteOn)
     {
         if (!IsVoting || votes.ContainsKey(LobbyManager.Instance.GetLocalPlayer())) return;
 
-        InvokeServerRpc(serverCastVote, playerToVoteOn.ID);
+        InvokeServerRpc(serverCastVote, playerToVoteOn != null ? playerToVoteOn.ID : ulong.MaxValue);
     }
 
     [ServerRPC(RequireOwnership = false)]

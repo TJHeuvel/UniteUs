@@ -13,7 +13,7 @@ class HUD_Vote_Player : MonoBehaviour
     [SerializeField] private Image[] imgPlayersVotedForMe;
 
     public PlayerController TargetPlayer { get; private set; }
-
+    public bool IsSelected => gameObject.activeInHierarchy && tgglSelectVote.isOn;
     public void SetInfo(PlayerController player, bool wasPlayerThatReported = false)
     {
         if (player == null)
@@ -46,7 +46,7 @@ class HUD_Vote_Player : MonoBehaviour
         if (TargetPlayer != null && VotingManager.Instance != null)
             VotingManager.Instance.OnPlayerVoteCasted -= onPlayerVoted;
     }
-    
+
     private void onPlayerVoted(NetworkPlayer whoVoted, NetworkPlayer whoTheyVotedOn)
     {
         if (whoVoted == TargetPlayer.NetworkPlayer)
