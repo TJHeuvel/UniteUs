@@ -57,7 +57,7 @@ class VotingManager : NetworkedBehaviour
         return votes.TryGetValue(player, out var votedOnWho) ? votedOnWho : null;
     }
 
-    
+
     //PlayerToVote is null to skip
     public void BroadcastPlayerVote(NetworkPlayer playerToVoteOn)
     {
@@ -137,5 +137,32 @@ class VotingManager : NetworkedBehaviour
         OnVotingEnded?.Invoke();
         IsVoting = false;
         //We dont want to clear votes here, because the UI still wants to show them even after voting has ended
+
+        //todo: dedicated server support
+        if (IsHost)
+            serverEjectHighestVotedPlayer();
+    }
+
+    private void serverEjectHighestVotedPlayer()
+    {
+        // We need to count how many votes there are for each player. Only if the top one is unique, e.g. its not a tie, can we eject
+
+        var votesGrouped = votes.Where(v => v.Value != null).GroupBy(v => v.Value).OrderByDescending(v => v.Count()).Take(2);
+        var it = votesGrouped.GetEnumerator();
+
+        //There was no vote that isnt null(skipped), dont do anything
+        if (!it.MoveNext()) return;
+
+        var playerToKill = it.Current.Key;
+        var playerToKillVotes = it.Current.Count();
+
+        //There is more than 1 player voted out
+        if (it.MoveNext())
+        {
+            //and that other player has the exact same votes as us, stop.
+            if (it.Current.Count() == playerToKillVotes) return;
+        }
+
+        PlayerManager.Instance.GetPlayerById(playerToKill.ID).NetworkController.BroadcastPlayerKilled();
     }
 }

@@ -20,7 +20,10 @@ class PlayerNetworkController : NetworkedBehaviour
     //TODO: Use Syncvars?
     public void BroadcastPlayerKilled()
     {
-        InvokeServerRpc(serverPlayerDied);
+        if (IsServer)
+            serverPlayerDied();
+        else
+            InvokeServerRpc(serverPlayerDied);
     }
     [ServerRPC(RequireOwnership = false)]
     private void serverPlayerDied()
