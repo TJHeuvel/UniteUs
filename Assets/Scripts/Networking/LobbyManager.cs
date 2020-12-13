@@ -38,8 +38,9 @@ class LobbyManager : NetworkedBehaviour
     [Serializable]
     public struct GameSettingsData : IBitWritable
     {
-        public static GameSettingsData Default => new GameSettingsData() { ImposterCount = 1, MovementSpeed = 6, VoteDuration = 30 };
+        public static GameSettingsData Default => new GameSettingsData() { ImposterCount = 1, MovementSpeed = 6, VoteDuration = 30, TaskCount = 5 };
         public int ImposterCount;
+        public int TaskCount;
         public float MovementSpeed;
         public float VoteDuration;
 
@@ -48,8 +49,9 @@ class LobbyManager : NetworkedBehaviour
             using (PooledBitReader reader = PooledBitReader.Get(stream))
             {
                 ImposterCount = reader.ReadByte();
-                MovementSpeed = reader.ReadSingle();
-                VoteDuration = reader.ReadSingle();
+                MovementSpeed = reader.ReadSinglePacked();
+                VoteDuration = reader.ReadSinglePacked();
+                TaskCount = reader.ReadUInt16Packed();
             }
         }
         public void Write(Stream stream)
@@ -57,10 +59,10 @@ class LobbyManager : NetworkedBehaviour
             using (PooledBitWriter writer = PooledBitWriter.Get(stream))
             {
                 writer.WriteByte((byte)ImposterCount);
-                writer.WriteSingle(MovementSpeed);
-                writer.WriteSingle(VoteDuration);
+                writer.WriteSinglePacked(MovementSpeed);
+                writer.WriteSinglePacked(VoteDuration);
+                writer.WriteUInt16Packed((ushort)TaskCount);
             }
-
         }
 
         public override string ToString() => $"Imposter count: {ImposterCount}\nMovement Speed: {MovementSpeed}\n Vote Duration: {VoteDuration}";

@@ -2,6 +2,8 @@
 using System.IO;
 using MLAPI;
 using MLAPI.Messaging;
+using MLAPI.NetworkedVar;
+using MLAPI.NetworkedVar.Collections;
 using UnityEngine;
 
 class PlayerNetworkController : NetworkedBehaviour
@@ -40,4 +42,10 @@ class PlayerNetworkController : NetworkedBehaviour
     [ClientRPC]
     private void clientPlayerDied() => playerController.Die();
 
+
+    public NetworkedList<TaskManager.TaskData> Tasks = new NetworkedList<TaskManager.TaskData>(new NetworkedVarSettings()
+    {
+        ReadPermission = NetworkedVarPermission.OwnerOnly, //Only sync this to me, not other players
+        WritePermission = NetworkedVarPermission.ServerOnly
+    });
 }
