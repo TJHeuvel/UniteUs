@@ -200,6 +200,7 @@ class TaskManager : NetworkedBehaviour
     public async Task<bool> BroadcastValidateAnswer(TaskData task, int answer)
     {
         //Uses included TaskUtils to wait for an answer
+        //Not sure if RPCResponse is going to be included in the Unity Multiplayer API, this is kind of a nice usecase
         var response = await InvokeServerRpc(serverValidateAnswer, task.LocationIndex, answer);
 
         return response.Value;

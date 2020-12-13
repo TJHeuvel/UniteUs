@@ -65,7 +65,7 @@ class LobbyManager : NetworkedBehaviour
             }
         }
 
-        public override string ToString() => $"Imposter count: {ImposterCount}\nMovement Speed: {MovementSpeed}\n Vote Duration: {VoteDuration}";
+        public override string ToString() => $"Imposter count: {ImposterCount}\nMovement Speed: {MovementSpeed}\n Vote Duration: {VoteDuration}, Tasks per player: {TaskCount}";
         
     }
 
