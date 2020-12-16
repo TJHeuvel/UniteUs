@@ -2,7 +2,7 @@
 
 This is [my](https://tjheuvel.net/) personal test project to see what pre-Unity MLAPI looks like and how it works. 
 
-I have modified it slightly to support my own way of managing networked objects. By default in MLAPI you have to use a prefab based workflow, and call some Spawn methods on the server. This is so it can manage the ids for each object itself, we need a unique ID per network object that is send over the network, otherwise we dont know where to send a message too.
+I have modified MLAPI slightly to support my own way of managing networked objects. By default in MLAPI you have to use a prefab based workflow, and call some Spawn methods on the server. This is so it can manage the ids for each object itself, we need a unique ID per network object that is send over the network, otherwise we dont know where to send a message too.
 
 I prefer to manage my own objects, and assign network ids manually. For objects in the scene i serialize a network-id, for players i manually assign them based on the player id. 
 
