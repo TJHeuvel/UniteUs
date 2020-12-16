@@ -12,4 +12,4 @@ Its made with Unity 2020.1.6f1, but should run on most versions. I copied over t
 
 The idea is that you can join a lobby by IP address, but instead of sending IP addresses over i encode them to a human readable-ish string. That is the lobby id. I have only tested Join Local.
 
-Assets by the talented Asset Jesus; [Kenney](Kenney.nl).
+Assets by the talented Asset Jesus; [Kenney](http://www.kenney.nl).
